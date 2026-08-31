@@ -12,7 +12,6 @@
 
 <title>Furry Character Gallery</title>
 
-
 <style>
 
 /* =========================================================
@@ -25,7 +24,6 @@
 
 html,
 body {
-
     margin: 0;
     padding: 0;
 
@@ -44,17 +42,28 @@ body {
         sans-serif;
 }
 
-
 body {
-
     overflow-x: hidden;
+    position: relative;
+}
 
-    /*
-     * 背景图片
-     *
-     * 将 background.jpg
-     * 放在仓库根目录即可。
-     */
+/*
+ * 独立固定背景层。
+ *
+ * 不再使用 background-attachment: fixed。
+ * 这样可以避免 Android / iOS 移动浏览器在上下滑动时，
+ * 背景跟着页面移动，然后松手弹回的问题。
+ */
+
+#background-layer {
+    position: fixed;
+    inset: 0;
+
+    width: 100%;
+    height: 100%;
+
+    z-index: 0;
+    pointer-events: none;
 
     background-image:
         linear-gradient(
@@ -64,11 +73,25 @@ body {
         url("background.gif");
 
     background-size: cover;
-
     background-position: center;
+    background-repeat: no-repeat;
 
-    background-attachment: fixed;
+    transform: translateZ(0);
+}
 
+/*
+ * 所有实际页面内容放在背景层上面。
+ */
+
+header,
+#search-area,
+#statistics,
+#loading,
+#error,
+#no-results,
+#characters {
+    position: relative;
+    z-index: 1;
 }
 
 
@@ -77,7 +100,6 @@ body {
    ========================================================= */
 
 header {
-
     width: 100%;
 
     padding:
@@ -86,12 +108,9 @@ header {
         20px;
 
     text-align: center;
-
 }
 
-
 header h1 {
-
     margin: 0;
 
     font-size: 32px;
@@ -99,12 +118,9 @@ header h1 {
     font-weight: 700;
 
     letter-spacing: 1px;
-
 }
 
-
 header p {
-
     margin:
         8px
         0
@@ -113,7 +129,6 @@ header p {
     color: #aaa;
 
     font-size: 14px;
-
 }
 
 
@@ -122,7 +137,6 @@ header p {
    ========================================================= */
 
 #search-area {
-
     width: 100%;
 
     max-width: 900px;
@@ -135,17 +149,18 @@ header p {
     padding:
         0
         30px;
-
 }
 
+/*
+ * 搜索栏整体。
+ */
 
-#search-box {
-
+#search-panel {
     width: 100%;
 
     padding:
-        13px
-        18px;
+        6px
+        8px;
 
     border:
         1px solid
@@ -153,43 +168,126 @@ header p {
 
     border-radius: 10px;
 
-    outline: none;
-
     background:
-        rgba(20,20,20,0.85);
-
-    color: white;
-
-    font-size: 15px;
+        rgba(20,20,20,0.88);
 
     transition:
         border-color 0.2s,
         box-shadow 0.2s;
-
 }
 
-
-#search-box::placeholder {
-
-    color: #777;
-
-}
-
-
-#search-box:focus {
-
+#search-panel:focus-within {
     border-color:
         rgba(255,255,255,0.35);
 
     box-shadow:
         0 0 15px
         rgba(255,255,255,0.06);
-
 }
 
+/*
+ * 点击标签后出现的搜索标签。
+ */
+
+#selected-tags {
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 6px;
+
+    padding:
+        3px
+        3px
+        5px;
+}
+
+.search-tag {
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 5px;
+
+    padding:
+        5px
+        9px;
+
+    border-radius: 999px;
+
+    background:
+        rgba(255,255,255,0.13);
+
+    color: #eee;
+
+    font-size: 13px;
+
+    line-height: 1;
+
+    white-space: nowrap;
+}
+
+.search-tag-close {
+    width: 16px;
+    height: 16px;
+
+    padding: 0;
+
+    border: none;
+
+    border-radius: 50%;
+
+    background:
+        rgba(255,255,255,0.12);
+
+    color: #bbb;
+
+    font-size: 13px;
+
+    line-height: 16px;
+
+    cursor: pointer;
+
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+}
+
+.search-tag-close:hover {
+    background:
+        rgba(255,255,255,0.25);
+
+    color: white;
+}
+
+/*
+ * 实际输入框。
+ */
+
+#search-box {
+    width: 100%;
+
+    padding:
+        9px
+        10px;
+
+    border: none;
+
+    outline: none;
+
+    background: transparent;
+
+    color: white;
+
+    font-size: 15px;
+}
+
+#search-box::placeholder {
+    color: #777;
+}
 
 #search-info {
-
     margin-top: 9px;
 
     color: #777;
@@ -197,7 +295,6 @@ header p {
     font-size: 12px;
 
     text-align: center;
-
 }
 
 
@@ -206,7 +303,6 @@ header p {
    ========================================================= */
 
 #statistics {
-
     text-align: center;
 
     color: #888;
@@ -214,7 +310,6 @@ header p {
     font-size: 13px;
 
     margin-bottom: 10px;
-
 }
 
 
@@ -223,7 +318,6 @@ header p {
    ========================================================= */
 
 #characters {
-
     width: 100%;
 
     max-width: 1400px;
@@ -234,12 +328,9 @@ header p {
         20px
         30px
         60px;
-
 }
 
-
 .character {
-
     margin-bottom: 50px;
 
     transition:
@@ -248,13 +339,10 @@ header p {
         max-height 0.35s ease,
         margin 0.35s ease;
 
-    max-height: 1000px;
-
+    max-height: 1400px;
 }
 
-
 .character.filtered-out {
-
     opacity: 0;
 
     transform:
@@ -267,7 +355,6 @@ header p {
     margin-bottom: 0;
 
     pointer-events: none;
-
 }
 
 
@@ -276,33 +363,106 @@ header p {
    ========================================================= */
 
 .character-title {
-
     display: flex;
 
     align-items: center;
 
     justify-content: space-between;
 
-    margin-bottom: 15px;
+    gap: 15px;
 
+    margin-bottom: 8px;
 }
 
-
 .character-title h2 {
-
     margin: 0;
 
     font-size: 24px;
 
+    line-height: 1.3;
 }
 
-
-.character-title span {
+.character-count {
+    flex-shrink: 0;
 
     color: #888;
 
     font-size: 13px;
+}
 
+
+/* =========================================================
+   角色简介
+   ========================================================= */
+
+.character-description {
+    margin:
+        0
+        0
+        10px;
+
+    color: #aaa;
+
+    font-size: 14px;
+
+    line-height: 1.6;
+}
+
+
+/* =========================================================
+   角色 Tags
+   ========================================================= */
+
+.character-tags {
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 7px;
+
+    margin-bottom: 15px;
+}
+
+.character-tag {
+    padding:
+        5px
+        10px;
+
+    border:
+        1px solid
+        rgba(255,255,255,0.10);
+
+    border-radius: 999px;
+
+    background:
+        rgba(0,0,0,0.38);
+
+    color: #bbb;
+
+    font-size: 12px;
+
+    line-height: 1;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        color 0.2s ease,
+        border-color 0.2s ease,
+        transform 0.2s ease;
+}
+
+.character-tag:hover {
+    background:
+        rgba(255,255,255,0.15);
+
+    border-color:
+        rgba(255,255,255,0.25);
+
+    color: white;
+
+    transform:
+        translateY(-1px);
 }
 
 
@@ -311,16 +471,12 @@ header p {
    ========================================================= */
 
 .gallery-wrapper {
-
     position: relative;
 
     width: 100%;
-
 }
 
-
 .gallery {
-
     display: flex;
 
     gap: 16px;
@@ -344,45 +500,35 @@ header p {
 
     cursor: grab;
 
+    /*
+     * 保持触摸设备上的横向滑动，
+     * 同时允许正常的页面上下滚动。
+     */
+    touch-action: pan-x pan-y;
 }
-
 
 .gallery:active {
-
     cursor: grabbing;
-
 }
-
 
 .gallery::-webkit-scrollbar {
-
     height: 8px;
-
 }
 
-
 .gallery::-webkit-scrollbar-track {
-
     background: #222;
 
     border-radius: 10px;
-
 }
 
-
 .gallery::-webkit-scrollbar-thumb {
-
     background: #555;
 
     border-radius: 10px;
-
 }
 
-
 .gallery::-webkit-scrollbar-thumb:hover {
-
     background: #777;
-
 }
 
 
@@ -391,7 +537,6 @@ header p {
    ========================================================= */
 
 .image-card {
-
     flex:
         0
         0
@@ -415,12 +560,9 @@ header p {
         transform 0.25s ease,
         box-shadow 0.25s ease,
         opacity 0.25s ease;
-
 }
 
-
 .image-card:hover {
-
     transform:
         translateY(-6px)
         scale(1.035);
@@ -430,12 +572,9 @@ header p {
         12px
         30px
         rgba(0,0,0,0.55);
-
 }
 
-
 .image-card img {
-
     width: 100%;
 
     height: 100%;
@@ -445,12 +584,9 @@ header p {
     object-fit: contain;
 
     background: #181818;
-
 }
 
-
 .image-number {
-
     position: absolute;
 
     left: 10px;
@@ -471,7 +607,6 @@ header p {
     color: #ddd;
 
     pointer-events: none;
-
 }
 
 
@@ -480,9 +615,7 @@ header p {
    ========================================================= */
 
 .image-card.search-hidden {
-
     display: none;
-
 }
 
 
@@ -491,7 +624,6 @@ header p {
    ========================================================= */
 
 .scroll-button {
-
     position: absolute;
 
     top: 50%;
@@ -526,29 +658,19 @@ header p {
 
     transition:
         background 0.2s ease;
-
 }
-
 
 .scroll-button:hover {
-
     background:
         rgba(255,255,255,0.2);
-
 }
-
 
 .scroll-left {
-
     left: 10px;
-
 }
 
-
 .scroll-right {
-
     right: 10px;
-
 }
 
 
@@ -557,7 +679,6 @@ header p {
    ========================================================= */
 
 #lightbox {
-
     position: fixed;
 
     inset: 0;
@@ -574,19 +695,13 @@ header p {
     justify-content: center;
 
     padding: 50px;
-
 }
-
 
 #lightbox.active {
-
     display: flex;
-
 }
 
-
 #lightbox-image {
-
     max-width: 95vw;
 
     max-height: 90vh;
@@ -596,12 +711,9 @@ header p {
     border-radius: 6px;
 
     user-select: none;
-
 }
 
-
 .lightbox-close {
-
     position: fixed;
 
     top: 20px;
@@ -626,20 +738,14 @@ header p {
     cursor: pointer;
 
     z-index: 10001;
-
 }
-
 
 .lightbox-close:hover {
-
     background:
         rgba(255,255,255,0.2);
-
 }
 
-
 .lightbox-button {
-
     position: fixed;
 
     top: 50%;
@@ -663,34 +769,22 @@ header p {
     cursor: pointer;
 
     z-index: 10001;
-
 }
-
 
 .lightbox-button:hover {
-
     background:
         rgba(255,255,255,0.15);
-
 }
-
 
 .lightbox-prev {
-
     left: 15px;
-
 }
-
 
 .lightbox-next {
-
     right: 15px;
-
 }
 
-
 #lightbox-info {
-
     position: fixed;
 
     bottom: 20px;
@@ -715,15 +809,15 @@ header p {
 
     z-index: 10001;
 
+    white-space: nowrap;
 }
 
 
 /* =========================================================
-   加载
+   加载 / 错误
    ========================================================= */
 
 #loading {
-
     text-align: center;
 
     padding: 80px 20px;
@@ -731,12 +825,9 @@ header p {
     color: #888;
 
     font-size: 15px;
-
 }
 
-
 #error {
-
     display: none;
 
     max-width: 700px;
@@ -754,16 +845,9 @@ header p {
     border-radius: 10px;
 
     color: #eaa;
-
 }
 
-
-/* =========================================================
-   无搜索结果
-   ========================================================= */
-
 #no-results {
-
     display: none;
 
     text-align: center;
@@ -773,7 +857,6 @@ header p {
     color: #777;
 
     font-size: 15px;
-
 }
 
 
@@ -784,100 +867,85 @@ header p {
 @media (max-width: 700px) {
 
     header {
-
         padding:
             25px
             20px
             15px;
-
     }
-
 
     header h1 {
-
         font-size: 25px;
-
     }
 
-
     #search-area {
-
         padding:
             0
             15px;
-
     }
 
-
     #characters {
-
         padding:
             15px
             15px
             40px;
-
     }
-
 
     .character {
-
         margin-bottom: 35px;
-
     }
 
+    .character-title {
+        align-items: flex-start;
+    }
 
     .character-title h2 {
-
         font-size: 20px;
-
     }
 
+    .character-count {
+        font-size: 12px;
+    }
+
+    .character-description {
+        font-size: 13px;
+    }
 
     .image-card {
-
         width: 200px;
 
         height: 200px;
-
     }
-
 
     .scroll-button {
-
         display: none;
-
     }
-
 
     #lightbox {
-
         padding: 20px;
-
     }
 
-
     .lightbox-button {
-
         width: 40px;
 
         height: 60px;
 
         font-size: 28px;
-
     }
-
 
     .lightbox-prev {
-
         left: 5px;
-
     }
 
-
     .lightbox-next {
-
         right: 5px;
+    }
 
+    #lightbox-info {
+        max-width: 80vw;
+
+        overflow: hidden;
+
+        text-overflow: ellipsis;
     }
 
 }
@@ -888,6 +956,9 @@ header p {
 
 
 <body>
+
+<!-- 独立固定背景层，避免移动端背景随页面弹动。 -->
+<div id="background-layer"></div>
 
 
 <header>
@@ -909,18 +980,22 @@ header p {
 
 <div id="search-area">
 
-    <input
-        id="search-box"
-        type="text"
-        placeholder="搜索角色名或图片编号，例如：玉、1、玉 1"
-        autocomplete="off"
-    >
+    <div id="search-panel">
 
+        <!-- 点击角色 Tag 后，会在这里生成可删除的搜索 Tag。 -->
+        <div id="selected-tags"></div>
+
+        <input
+            id="search-box"
+            type="text"
+            placeholder="搜索角色名、英文名、昵称、标签或图片编号"
+            autocomplete="off"
+        >
+
+    </div>
 
     <div id="search-info">
-
-        支持角色名称、精确图片编号，以及组合搜索
-
+        支持中文、英文、昵称、标签和精确图片编号；点击标签可加入筛选
     </div>
 
 </div>
@@ -934,23 +1009,17 @@ header p {
 
 
 <!-- =====================================================
-     加载
+     加载 / 错误 / 无结果
      ===================================================== -->
 
 <div id="loading">
-
     正在读取图库……
-
 </div>
-
 
 <div id="error"></div>
 
-
 <div id="no-results">
-
     没有找到符合条件的图片。
-
 </div>
 
 
@@ -967,26 +1036,21 @@ header p {
 
 <div id="lightbox">
 
-
     <button
         class="lightbox-close"
         onclick="closeLightbox()"
+        aria-label="关闭"
     >
-
         ×
-
     </button>
-
 
     <button
         class="lightbox-button lightbox-prev"
         onclick="previousImage()"
+        aria-label="上一张"
     >
-
         ‹
-
     </button>
-
 
     <img
         id="lightbox-image"
@@ -994,19 +1058,15 @@ header p {
         alt="Preview"
     >
 
-
     <button
         class="lightbox-button lightbox-next"
         onclick="nextImage()"
+        aria-label="下一张"
     >
-
         ›
-
     </button>
 
-
     <div id="lightbox-info"></div>
-
 
 </div>
 
@@ -1025,6 +1085,17 @@ let currentIndex = 0;
 
 let currentCharacterName = "";
 
+/*
+ * 当前通过点击 Tag 加入的筛选条件。
+ *
+ * 这里保存 Tag 的原始显示文字。
+ * 比如：
+ *
+ * ["LoL", "龙"]
+ */
+
+let selectedTags = [];
+
 
 /* =========================================================
    读取 gallery.json
@@ -1037,30 +1108,26 @@ async function loadGallery() {
             "loading"
         );
 
-
     const container =
         document.getElementById(
             "characters"
         );
-
 
     const error =
         document.getElementById(
             "error"
         );
 
-
     try {
 
         /*
-         * 使用时间戳避免读取旧缓存
+         * 使用时间戳避免读取旧缓存。
          */
 
         const response =
             await fetch(
                 `gallery.json?t=${Date.now()}`
             );
-
 
         if (!response.ok) {
 
@@ -1070,17 +1137,16 @@ async function loadGallery() {
 
         }
 
-
         const data =
             await response.json();
 
-
         galleryData =
-            data.characters || [];
-
+            Array.isArray(data.characters)
+                ? data.characters
+                : [];
 
         /*
-         * 创建角色
+         * 创建角色。
          */
 
         galleryData.forEach(
@@ -1091,7 +1157,6 @@ async function loadGallery() {
                         character
                     );
 
-
                 container.appendChild(
                     section
                 );
@@ -1099,24 +1164,21 @@ async function loadGallery() {
             }
         );
 
-
         /*
-         * 更新统计
+         * 更新统计。
          */
 
         updateStatistics();
 
-
         /*
-         * 隐藏加载
+         * 隐藏加载。
          */
 
         loading.style.display =
             "none";
 
-
         /*
-         * 启用搜索
+         * 启用搜索。
          */
 
         document
@@ -1128,35 +1190,28 @@ async function loadGallery() {
                 performSearch
             );
 
+        renderSelectedTags();
 
     } catch (err) {
 
         console.error(err);
 
-
         loading.style.display =
             "none";
-
 
         error.style.display =
             "block";
 
-
         error.innerHTML = `
-
             <strong>
                 读取图库失败。
             </strong>
-
             <br><br>
-
-            ${err.message}
-
+            ${escapeHtml(err.message)}
             <br><br>
-
             请确认仓库根目录存在
-            <strong>gallery.json</strong>。
-
+            <strong>gallery.json</strong>，
+            并确认 GitHub Actions 已经成功运行。
         `;
 
     }
@@ -1177,10 +1232,8 @@ function createCharacterGallery(
             "section"
         );
 
-
     section.className =
         "character";
-
 
     /*
      * =====================================================
@@ -1193,39 +1246,129 @@ function createCharacterGallery(
             "div"
         );
 
-
     title.className =
         "character-title";
-
 
     const heading =
         document.createElement(
             "h2"
         );
 
-
     heading.textContent =
-        character.name;
-
+        formatCharacterName(character);
 
     const count =
         document.createElement(
             "span"
         );
 
+    count.className =
+        "character-count";
 
     count.textContent =
         `${character.images.length} 张图片`;
-
 
     title.appendChild(
         heading
     );
 
-
     title.appendChild(
         count
     );
+
+    section.appendChild(
+        title
+    );
+
+
+    /*
+     * =====================================================
+     * 角色简介
+     * =====================================================
+     */
+
+    if (character.description) {
+
+        const description =
+            document.createElement(
+                "div"
+            );
+
+        description.className =
+            "character-description";
+
+        description.textContent =
+            character.description;
+
+        section.appendChild(
+            description
+        );
+
+    }
+
+
+    /*
+     * =====================================================
+     * Tags
+     * =====================================================
+     */
+
+    if (
+        Array.isArray(character.tags) &&
+        character.tags.length > 0
+    ) {
+
+        const tagContainer =
+            document.createElement(
+                "div"
+            );
+
+        tagContainer.className =
+            "character-tags";
+
+        character.tags.forEach(
+            tag => {
+
+                const tagButton =
+                    document.createElement(
+                        "button"
+                    );
+
+                tagButton.type =
+                    "button";
+
+                tagButton.className =
+                    "character-tag";
+
+                tagButton.textContent =
+                    `#${tag}`;
+
+                tagButton.title =
+                    `搜索标签：${tag}`;
+
+                tagButton.addEventListener(
+                    "click",
+                    () => {
+
+                        addTagFilter(
+                            String(tag)
+                        );
+
+                    }
+                );
+
+                tagContainer.appendChild(
+                    tagButton
+                );
+
+            }
+        );
+
+        section.appendChild(
+            tagContainer
+        );
+
+    }
 
 
     /*
@@ -1239,16 +1382,13 @@ function createCharacterGallery(
             "div"
         );
 
-
     wrapper.className =
         "gallery-wrapper";
-
 
     const gallery =
         document.createElement(
             "div"
         );
-
 
     gallery.className =
         "gallery";
@@ -1271,18 +1411,15 @@ function createCharacterGallery(
                     "div"
                 );
 
-
             card.className =
                 "image-card";
 
-
             /*
-             * 搜索用数据
+             * 搜索用数据。
              */
 
-            card.dataset.character =
-                character.name;
-
+            card.dataset.characterId =
+                character.id || "";
 
             card.dataset.filename =
                 getFilename(
@@ -1299,14 +1436,11 @@ function createCharacterGallery(
                     "img"
                 );
 
-
             img.src =
                 imagePath;
 
-
             img.alt =
-                `${character.name} ${getFilename(imagePath)}`;
-
+                `${formatCharacterName(character)} ${getFilename(imagePath)}`;
 
             img.loading =
                 "lazy";
@@ -1321,10 +1455,8 @@ function createCharacterGallery(
                     "div"
                 );
 
-
             number.className =
                 "image-number";
-
 
             number.textContent =
                 getFilename(
@@ -1333,13 +1465,12 @@ function createCharacterGallery(
 
 
             /*
-             * 添加元素
+             * 添加元素。
              */
 
             card.appendChild(
                 img
             );
-
 
             card.appendChild(
                 number
@@ -1347,7 +1478,7 @@ function createCharacterGallery(
 
 
             /*
-             * 点击打开 Lightbox
+             * 点击打开 Lightbox。
              */
 
             card.addEventListener(
@@ -1357,12 +1488,11 @@ function createCharacterGallery(
                     openLightbox(
                         character.images,
                         index,
-                        character.name
+                        formatCharacterName(character)
                     );
 
                 }
             );
-
 
             gallery.appendChild(
                 card
@@ -1383,14 +1513,19 @@ function createCharacterGallery(
             "button"
         );
 
+    leftButton.type =
+        "button";
 
     leftButton.className =
         "scroll-button scroll-left";
 
-
     leftButton.textContent =
         "‹";
 
+    leftButton.setAttribute(
+        "aria-label",
+        "向左滚动"
+    );
 
     leftButton.onclick =
         () => {
@@ -1417,14 +1552,19 @@ function createCharacterGallery(
             "button"
         );
 
+    rightButton.type =
+        "button";
 
     rightButton.className =
         "scroll-button scroll-right";
 
-
     rightButton.textContent =
         "›";
 
+    rightButton.setAttribute(
+        "aria-label",
+        "向右滚动"
+    );
 
     rightButton.onclick =
         () => {
@@ -1450,28 +1590,56 @@ function createCharacterGallery(
         leftButton
     );
 
-
     wrapper.appendChild(
         gallery
     );
-
 
     wrapper.appendChild(
         rightButton
     );
 
-
-    section.appendChild(
-        title
-    );
-
-
     section.appendChild(
         wrapper
     );
 
-
     return section;
+
+}
+
+
+/* =========================================================
+   角色显示名称
+   ========================================================= */
+
+function formatCharacterName(
+    character
+) {
+
+    const name =
+        String(
+            character.name ||
+            character.id ||
+            ""
+        ).trim();
+
+    const nameEn =
+        String(
+            character.name_en ||
+            ""
+        ).trim();
+
+    if (
+        name &&
+        nameEn &&
+        name.toLowerCase() !==
+        nameEn.toLowerCase()
+    ) {
+
+        return `${name} / ${nameEn}`;
+
+    }
+
+    return name || nameEn;
 
 }
 
@@ -1484,7 +1652,7 @@ function getFilename(
     path
 ) {
 
-    return path
+    return String(path)
         .split("/")
         .pop();
 
@@ -1517,15 +1685,221 @@ function getImageNumber(
             /^(\d+)(?:\.[^.]+)?$/i
         );
 
-
     if (!match) {
 
         return null;
 
     }
 
-
     return match[1];
+
+}
+
+
+/* =========================================================
+   文本标准化
+   ========================================================= */
+
+function normalizeText(
+    value
+) {
+
+    return String(
+        value ?? ""
+    )
+        .toLocaleLowerCase()
+        .trim();
+
+}
+
+
+/* =========================================================
+   获取角色搜索文本
+   ========================================================= */
+
+function getCharacterSearchText(
+    character
+) {
+
+    const fields = [
+
+        character.name,
+
+        character.name_en,
+
+        ...(Array.isArray(character.aliases)
+            ? character.aliases
+            : []),
+
+        ...(Array.isArray(character.tags)
+            ? character.tags
+            : [])
+
+    ];
+
+    return fields
+        .map(normalizeText)
+        .filter(Boolean)
+        .join(" ");
+
+}
+
+
+/* =========================================================
+   Tag 搜索
+   ========================================================= */
+
+/*
+ * 点击页面上的 Tag：
+ *
+ * #LoL
+ *
+ * ↓
+ *
+ * [ LoL × ]
+ *
+ * 如果已经存在，就不会重复添加。
+ */
+
+function addTagFilter(
+    tag
+) {
+
+    const normalized =
+        normalizeText(tag);
+
+    if (!normalized) {
+        return;
+    }
+
+    const exists =
+        selectedTags.some(
+            existing =>
+                normalizeText(existing) ===
+                normalized
+        );
+
+    if (!exists) {
+
+        selectedTags.push(
+            tag
+        );
+
+    }
+
+    renderSelectedTags();
+
+    performSearch();
+
+}
+
+
+/*
+ * 删除单个 Tag。
+ */
+
+function removeTagFilter(
+    index
+) {
+
+    if (
+        index < 0 ||
+        index >= selectedTags.length
+    ) {
+        return;
+    }
+
+    selectedTags.splice(
+        index,
+        1
+    );
+
+    renderSelectedTags();
+
+    performSearch();
+
+}
+
+
+/*
+ * 绘制搜索栏里的 Tag。
+ */
+
+function renderSelectedTags() {
+
+    const container =
+        document.getElementById(
+            "selected-tags"
+        );
+
+    container.innerHTML = "";
+
+    selectedTags.forEach(
+        (
+            tag,
+            index
+        ) => {
+
+            const chip =
+                document.createElement(
+                    "span"
+                );
+
+            chip.className =
+                "search-tag";
+
+            const text =
+                document.createElement(
+                    "span"
+                );
+
+            text.textContent =
+                tag;
+
+            const close =
+                document.createElement(
+                    "button"
+                );
+
+            close.type =
+                "button";
+
+            close.className =
+                "search-tag-close";
+
+            close.textContent =
+                "×";
+
+            close.setAttribute(
+                "aria-label",
+                `删除标签 ${tag}`
+            );
+
+            close.addEventListener(
+                "click",
+                () => {
+
+                    removeTagFilter(
+                        index
+                    );
+
+                }
+            );
+
+            chip.appendChild(
+                text
+            );
+
+            chip.appendChild(
+                close
+            );
+
+            container.appendChild(
+                chip
+            );
+
+        }
+    );
 
 }
 
@@ -1541,65 +1915,67 @@ function performSearch() {
             "search-box"
         );
 
-
     const input =
         searchBox.value.trim();
-
 
     const sections =
         document.querySelectorAll(
             ".character"
         );
 
-
     const noResults =
         document.getElementById(
             "no-results"
         );
-
 
     const searchInfo =
         document.getElementById(
             "search-info"
         );
 
-
     /*
      * =====================================================
-     * 空搜索
+     * 自由文字搜索条件
      *
-     * 无论之前是什么搜索状态，
-     * 只要搜索框为空，
-     * 强制恢复全部内容。
+     * 例如：
      *
-     * 这是针对快速连续 Backspace
-     * 的修复。
+     * 玉 1
+     *
+     * ↓
+     *
+     * ["玉", "1"]
+     *
+     * 每个条件都必须满足。
      * =====================================================
      */
 
-    if (input === "") {
+    const textTokens =
+        input
+            .toLocaleLowerCase()
+            .split(/\s+/)
+            .filter(Boolean);
+
+    /*
+     * 完全没有任何搜索条件时，
+     * 恢复所有内容。
+     */
+
+    if (
+        textTokens.length === 0 &&
+        selectedTags.length === 0
+    ) {
 
         sections.forEach(
             section => {
-
-                /*
-                 * 恢复角色
-                 */
 
                 section.classList.remove(
                     "filtered-out"
                 );
 
-
-                /*
-                 * 恢复所有图片
-                 */
-
                 const cards =
                     section.querySelectorAll(
                         ".image-card"
                     );
-
 
                 cards.forEach(
                     card => {
@@ -1614,47 +1990,15 @@ function performSearch() {
             }
         );
 
-
-        /*
-         * 恢复搜索提示
-         */
-
         searchInfo.textContent =
-            "支持角色名称、精确图片编号，以及组合搜索";
-
-
-        /*
-         * 隐藏无结果
-         */
+            "支持中文、英文、昵称、标签和精确图片编号；点击标签可加入筛选";
 
         noResults.style.display =
             "none";
 
-
         return;
 
     }
-
-
-    /*
-     * =====================================================
-     * 搜索条件
-     *
-     * 例如：
-     *
-     * 玉 1
-     *
-     * ↓
-     *
-     * ["玉", "1"]
-     * =====================================================
-     */
-
-    const tokens =
-        input
-            .toLowerCase()
-            .split(/\s+/)
-            .filter(Boolean);
 
 
     let visibleImages = 0;
@@ -1671,29 +2015,80 @@ function performSearch() {
     sections.forEach(
         section => {
 
-            const characterTitle =
-                section.querySelector(
-                    ".character-title h2"
+            const characterId =
+                section
+                    .querySelector(
+                        ".image-card"
+                    )
+                    ?.dataset
+                    .characterId;
+
+            const character =
+                galleryData.find(
+                    item =>
+                        String(item.id) ===
+                        String(characterId)
                 );
 
-
-            if (!characterTitle) {
-
+            if (!character) {
                 return;
-
             }
 
 
-            const characterName =
-                characterTitle.textContent
-                    .toLowerCase();
+            /*
+             * 角色全部可搜索字段：
+             *
+             * name
+             * name_en
+             * aliases
+             * tags
+             */
+
+            const searchText =
+                getCharacterSearchText(
+                    character
+                );
+
+
+            /*
+             * =================================================
+             * Tag 条件
+             *
+             * 点击 Tag 后使用精确标签匹配。
+             *
+             * 例如：
+             *
+             * [LoL ×] [龙 ×]
+             *
+             * 必须同时拥有 LoL 和 龙。
+             * =================================================
+             */
+
+            const characterTags =
+                Array.isArray(character.tags)
+                    ? character.tags
+                    : [];
+
+            const normalizedCharacterTags =
+                characterTags.map(
+                    normalizeText
+                );
+
+
+            const tagsMatched =
+                selectedTags.every(
+                    tag =>
+                        normalizedCharacterTags
+                            .includes(
+                                normalizeText(tag)
+                            )
+                );
 
 
             const cards =
                 section.querySelectorAll(
                     ".image-card"
                 );
-
 
             let characterHasMatch =
                 false;
@@ -1713,8 +2108,7 @@ function performSearch() {
                             card.dataset.filename ||
                             ""
                         )
-                        .toLowerCase();
-
+                        .toLocaleLowerCase();
 
                     const imageNumber =
                         getImageNumber(
@@ -1723,23 +2117,21 @@ function performSearch() {
 
 
                     /*
-                     * 每一个搜索词
-                     * 都必须满足。
+                     * 每个文字搜索词都必须满足。
                      */
 
-                    const matched =
-                        tokens.every(
+                    const textMatched =
+                        textTokens.every(
                             token => {
 
                                 /*
-                                 * 数字搜索
+                                 * 数字搜索：
                                  *
-                                 * 精确匹配编号。
+                                 * 精确匹配图片编号。
                                  *
                                  * 搜索 1：
                                  *
                                  * ✓ 1.jpg
-                                 *
                                  * ✗ 11.jpg
                                  * ✗ 21.jpg
                                  */
@@ -1759,12 +2151,22 @@ function performSearch() {
 
 
                                 /*
-                                 * 文字搜索
+                                 * 文字搜索：
                                  *
-                                 * 匹配角色名。
+                                 * 对角色名称、
+                                 * 英文名、
+                                 * aliases、
+                                 * tags
+                                 * 做模糊包含匹配。
+                                 *
+                                 * 因此：
+                                 *
+                                 * lol → LoL
+                                 * der → Smolder
+                                 * 小龙 → alias
                                  */
 
-                                return characterName.includes(
+                                return searchText.includes(
                                     token
                                 );
 
@@ -1772,11 +2174,10 @@ function performSearch() {
                         );
 
 
-                    /*
-                     * =================================================
-                     * 更新图片状态
-                     * =================================================
-                     */
+                    const matched =
+                        tagsMatched &&
+                        textMatched;
+
 
                     if (matched) {
 
@@ -1784,13 +2185,10 @@ function performSearch() {
                             "search-hidden"
                         );
 
-
                         characterHasMatch =
                             true;
 
-
                         visibleImages++;
-
 
                     } else {
 
@@ -1816,9 +2214,7 @@ function performSearch() {
                     "filtered-out"
                 );
 
-
                 visibleCharacters++;
-
 
             } else {
 
@@ -1874,7 +2270,6 @@ function updateStatistics() {
     const totalCharacters =
         galleryData.length;
 
-
     const totalImages =
         galleryData.reduce(
             (
@@ -1884,7 +2279,13 @@ function updateStatistics() {
 
                 return (
                     total +
-                    character.images.length
+                    (
+                        Array.isArray(
+                            character.images
+                        )
+                            ? character.images.length
+                            : 0
+                    )
                 );
 
             },
@@ -1903,6 +2304,27 @@ function updateStatistics() {
 
 
 /* =========================================================
+   HTML 转义
+   ========================================================= */
+
+function escapeHtml(
+    value
+) {
+
+    const div =
+        document.createElement(
+            "div"
+        );
+
+    div.textContent =
+        String(value);
+
+    return div.innerHTML;
+
+}
+
+
+/* =========================================================
    Lightbox
    ========================================================= */
 
@@ -1915,17 +2337,13 @@ function openLightbox(
     currentImages =
         images;
 
-
     currentIndex =
         index;
-
 
     currentCharacterName =
         characterName;
 
-
     updateLightbox();
-
 
     document
         .getElementById(
@@ -1934,16 +2352,11 @@ function openLightbox(
         .classList
         .add("active");
 
-
     document.body.style.overflow =
         "hidden";
 
 }
 
-
-/* =========================================================
-   更新 Lightbox
-   ========================================================= */
 
 function updateLightbox() {
 
@@ -1956,18 +2369,15 @@ function updateLightbox() {
 
     }
 
-
     const image =
         currentImages[
             currentIndex
         ];
 
-
     const filename =
         getFilename(
             image
         );
-
 
     document
         .getElementById(
@@ -1975,7 +2385,6 @@ function updateLightbox() {
         )
         .src =
         image;
-
 
     document
         .getElementById(
@@ -1987,10 +2396,6 @@ function updateLightbox() {
 }
 
 
-/* =========================================================
-   关闭 Lightbox
-   ========================================================= */
-
 function closeLightbox() {
 
     document
@@ -2000,16 +2405,11 @@ function closeLightbox() {
         .classList
         .remove("active");
 
-
     document.body.style.overflow =
         "";
 
 }
 
-
-/* =========================================================
-   上一张
-   ========================================================= */
 
 function previousImage() {
 
@@ -2022,9 +2422,7 @@ function previousImage() {
 
     }
 
-
     currentIndex--;
-
 
     if (
         currentIndex < 0
@@ -2035,15 +2433,10 @@ function previousImage() {
 
     }
 
-
     updateLightbox();
 
 }
 
-
-/* =========================================================
-   下一张
-   ========================================================= */
 
 function nextImage() {
 
@@ -2056,9 +2449,7 @@ function nextImage() {
 
     }
 
-
     currentIndex++;
-
 
     if (
         currentIndex >=
@@ -2068,7 +2459,6 @@ function nextImage() {
         currentIndex = 0;
 
     }
-
 
     updateLightbox();
 
@@ -2088,11 +2478,6 @@ document.addEventListener(
                 "lightbox"
             );
 
-
-        /*
-         * Lightbox 没打开时不处理
-         */
-
         if (
             !lightbox.classList.contains(
                 "active"
@@ -2103,11 +2488,6 @@ document.addEventListener(
 
         }
 
-
-        /*
-         * 上一张
-         */
-
         if (
             event.key ===
             "ArrowLeft"
@@ -2117,11 +2497,6 @@ document.addEventListener(
 
         }
 
-
-        /*
-         * 下一张
-         */
-
         if (
             event.key ===
             "ArrowRight"
@@ -2130,11 +2505,6 @@ document.addEventListener(
             nextImage();
 
         }
-
-
-        /*
-         * ESC
-         */
 
         if (
             event.key ===
@@ -2181,7 +2551,6 @@ document
 loadGallery();
 
 </script>
-
 
 </body>
 
