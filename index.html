@@ -1,0 +1,2188 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<title>Furry Character Gallery</title>
+
+
+<style>
+
+/* =========================================================
+   基础
+   ========================================================= */
+
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+
+    margin: 0;
+    padding: 0;
+
+    width: 100%;
+    min-height: 100%;
+
+    background: #111;
+
+    color: #fff;
+
+    font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        "Microsoft YaHei",
+        sans-serif;
+}
+
+
+body {
+
+    overflow-x: hidden;
+
+    /*
+     * 背景图片
+     *
+     * 将 background.jpg
+     * 放在仓库根目录即可。
+     */
+
+    background-image:
+        linear-gradient(
+            rgba(0,0,0,0.68),
+            rgba(0,0,0,0.68)
+        ),
+        url("background.jpg");
+
+    background-size: cover;
+
+    background-position: center;
+
+    background-attachment: fixed;
+
+}
+
+
+/* =========================================================
+   顶部
+   ========================================================= */
+
+header {
+
+    width: 100%;
+
+    padding:
+        30px
+        40px
+        20px;
+
+    text-align: center;
+
+}
+
+
+header h1 {
+
+    margin: 0;
+
+    font-size: 32px;
+
+    font-weight: 700;
+
+    letter-spacing: 1px;
+
+}
+
+
+header p {
+
+    margin:
+        8px
+        0
+        0;
+
+    color: #aaa;
+
+    font-size: 14px;
+
+}
+
+
+/* =========================================================
+   搜索区域
+   ========================================================= */
+
+#search-area {
+
+    width: 100%;
+
+    max-width: 900px;
+
+    margin:
+        10px
+        auto
+        20px;
+
+    padding:
+        0
+        30px;
+
+}
+
+
+#search-box {
+
+    width: 100%;
+
+    padding:
+        13px
+        18px;
+
+    border:
+        1px solid
+        rgba(255,255,255,0.15);
+
+    border-radius: 10px;
+
+    outline: none;
+
+    background:
+        rgba(20,20,20,0.85);
+
+    color: white;
+
+    font-size: 15px;
+
+    transition:
+        border-color 0.2s,
+        box-shadow 0.2s;
+
+}
+
+
+#search-box::placeholder {
+
+    color: #777;
+
+}
+
+
+#search-box:focus {
+
+    border-color:
+        rgba(255,255,255,0.35);
+
+    box-shadow:
+        0 0 15px
+        rgba(255,255,255,0.06);
+
+}
+
+
+#search-info {
+
+    margin-top: 9px;
+
+    color: #777;
+
+    font-size: 12px;
+
+    text-align: center;
+
+}
+
+
+/* =========================================================
+   总统计
+   ========================================================= */
+
+#statistics {
+
+    text-align: center;
+
+    color: #888;
+
+    font-size: 13px;
+
+    margin-bottom: 10px;
+
+}
+
+
+/* =========================================================
+   角色列表
+   ========================================================= */
+
+#characters {
+
+    width: 100%;
+
+    max-width: 1400px;
+
+    margin: 0 auto;
+
+    padding:
+        20px
+        30px
+        60px;
+
+}
+
+
+.character {
+
+    margin-bottom: 50px;
+
+    transition:
+        opacity 0.3s ease,
+        transform 0.3s ease,
+        max-height 0.35s ease,
+        margin 0.35s ease;
+
+    max-height: 1000px;
+
+}
+
+
+.character.filtered-out {
+
+    opacity: 0;
+
+    transform:
+        scale(0.96);
+
+    max-height: 0;
+
+    overflow: hidden;
+
+    margin-bottom: 0;
+
+    pointer-events: none;
+
+}
+
+
+/* =========================================================
+   角色标题
+   ========================================================= */
+
+.character-title {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    margin-bottom: 15px;
+
+}
+
+
+.character-title h2 {
+
+    margin: 0;
+
+    font-size: 24px;
+
+}
+
+
+.character-title span {
+
+    color: #888;
+
+    font-size: 13px;
+
+}
+
+
+/* =========================================================
+   横向画廊
+   ========================================================= */
+
+.gallery-wrapper {
+
+    position: relative;
+
+    width: 100%;
+
+}
+
+
+.gallery {
+
+    display: flex;
+
+    gap: 16px;
+
+    overflow-x: auto;
+
+    overflow-y: hidden;
+
+    padding:
+        5px
+        2px
+        15px;
+
+    scroll-behavior: smooth;
+
+    scrollbar-width: thin;
+
+    scrollbar-color:
+        #555
+        #222;
+
+    cursor: grab;
+
+}
+
+
+.gallery:active {
+
+    cursor: grabbing;
+
+}
+
+
+.gallery::-webkit-scrollbar {
+
+    height: 8px;
+
+}
+
+
+.gallery::-webkit-scrollbar-track {
+
+    background: #222;
+
+    border-radius: 10px;
+
+}
+
+
+.gallery::-webkit-scrollbar-thumb {
+
+    background: #555;
+
+    border-radius: 10px;
+
+}
+
+
+.gallery::-webkit-scrollbar-thumb:hover {
+
+    background: #777;
+
+}
+
+
+/* =========================================================
+   图片卡片
+   ========================================================= */
+
+.image-card {
+
+    flex:
+        0
+        0
+        auto;
+
+    width: 260px;
+
+    height: 260px;
+
+    background: #1c1c1c;
+
+    border-radius: 12px;
+
+    overflow: hidden;
+
+    position: relative;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease,
+        opacity 0.25s ease;
+
+}
+
+
+.image-card:hover {
+
+    transform:
+        translateY(-6px)
+        scale(1.035);
+
+    box-shadow:
+        0
+        12px
+        30px
+        rgba(0,0,0,0.55);
+
+}
+
+
+.image-card img {
+
+    width: 100%;
+
+    height: 100%;
+
+    display: block;
+
+    object-fit: contain;
+
+    background: #181818;
+
+}
+
+
+.image-number {
+
+    position: absolute;
+
+    left: 10px;
+
+    bottom: 10px;
+
+    padding:
+        4px
+        8px;
+
+    background:
+        rgba(0,0,0,0.65);
+
+    border-radius: 6px;
+
+    font-size: 12px;
+
+    color: #ddd;
+
+    pointer-events: none;
+
+}
+
+
+/* =========================================================
+   搜索隐藏图片
+   ========================================================= */
+
+.image-card.search-hidden {
+
+    display: none;
+
+}
+
+
+/* =========================================================
+   左右滚动按钮
+   ========================================================= */
+
+.scroll-button {
+
+    position: absolute;
+
+    top: 50%;
+
+    transform:
+        translateY(-50%);
+
+    width: 42px;
+
+    height: 42px;
+
+    border: none;
+
+    border-radius: 50%;
+
+    background:
+        rgba(0,0,0,0.75);
+
+    color: white;
+
+    font-size: 24px;
+
+    cursor: pointer;
+
+    z-index: 5;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    transition:
+        background 0.2s ease;
+
+}
+
+
+.scroll-button:hover {
+
+    background:
+        rgba(255,255,255,0.2);
+
+}
+
+
+.scroll-left {
+
+    left: 10px;
+
+}
+
+
+.scroll-right {
+
+    right: 10px;
+
+}
+
+
+/* =========================================================
+   Lightbox
+   ========================================================= */
+
+#lightbox {
+
+    position: fixed;
+
+    inset: 0;
+
+    background:
+        rgba(0,0,0,0.92);
+
+    z-index: 9999;
+
+    display: none;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 50px;
+
+}
+
+
+#lightbox.active {
+
+    display: flex;
+
+}
+
+
+#lightbox-image {
+
+    max-width: 95vw;
+
+    max-height: 90vh;
+
+    object-fit: contain;
+
+    border-radius: 6px;
+
+    user-select: none;
+
+}
+
+
+.lightbox-close {
+
+    position: fixed;
+
+    top: 20px;
+
+    right: 25px;
+
+    width: 45px;
+
+    height: 45px;
+
+    border: none;
+
+    border-radius: 50%;
+
+    background:
+        rgba(255,255,255,0.1);
+
+    color: white;
+
+    font-size: 30px;
+
+    cursor: pointer;
+
+    z-index: 10001;
+
+}
+
+
+.lightbox-close:hover {
+
+    background:
+        rgba(255,255,255,0.2);
+
+}
+
+
+.lightbox-button {
+
+    position: fixed;
+
+    top: 50%;
+
+    transform:
+        translateY(-50%);
+
+    width: 55px;
+
+    height: 70px;
+
+    border: none;
+
+    background:
+        rgba(0,0,0,0.5);
+
+    color: white;
+
+    font-size: 40px;
+
+    cursor: pointer;
+
+    z-index: 10001;
+
+}
+
+
+.lightbox-button:hover {
+
+    background:
+        rgba(255,255,255,0.15);
+
+}
+
+
+.lightbox-prev {
+
+    left: 15px;
+
+}
+
+
+.lightbox-next {
+
+    right: 15px;
+
+}
+
+
+#lightbox-info {
+
+    position: fixed;
+
+    bottom: 20px;
+
+    left: 50%;
+
+    transform:
+        translateX(-50%);
+
+    padding:
+        7px
+        14px;
+
+    border-radius: 8px;
+
+    background:
+        rgba(0,0,0,0.65);
+
+    color: #ddd;
+
+    font-size: 13px;
+
+    z-index: 10001;
+
+}
+
+
+/* =========================================================
+   加载
+   ========================================================= */
+
+#loading {
+
+    text-align: center;
+
+    padding: 80px 20px;
+
+    color: #888;
+
+    font-size: 15px;
+
+}
+
+
+#error {
+
+    display: none;
+
+    max-width: 700px;
+
+    margin: 50px auto;
+
+    padding: 20px;
+
+    background: #251818;
+
+    border:
+        1px solid
+        #633;
+
+    border-radius: 10px;
+
+    color: #eaa;
+
+}
+
+
+/* =========================================================
+   无搜索结果
+   ========================================================= */
+
+#no-results {
+
+    display: none;
+
+    text-align: center;
+
+    padding: 70px 20px;
+
+    color: #777;
+
+    font-size: 15px;
+
+}
+
+
+/* =========================================================
+   手机适配
+   ========================================================= */
+
+@media (max-width: 700px) {
+
+    header {
+
+        padding:
+            25px
+            20px
+            15px;
+
+    }
+
+
+    header h1 {
+
+        font-size: 25px;
+
+    }
+
+
+    #search-area {
+
+        padding:
+            0
+            15px;
+
+    }
+
+
+    #characters {
+
+        padding:
+            15px
+            15px
+            40px;
+
+    }
+
+
+    .character {
+
+        margin-bottom: 35px;
+
+    }
+
+
+    .character-title h2 {
+
+        font-size: 20px;
+
+    }
+
+
+    .image-card {
+
+        width: 200px;
+
+        height: 200px;
+
+    }
+
+
+    .scroll-button {
+
+        display: none;
+
+    }
+
+
+    #lightbox {
+
+        padding: 20px;
+
+    }
+
+
+    .lightbox-button {
+
+        width: 40px;
+
+        height: 60px;
+
+        font-size: 28px;
+
+    }
+
+
+    .lightbox-prev {
+
+        left: 5px;
+
+    }
+
+
+    .lightbox-next {
+
+        right: 5px;
+
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<header>
+
+    <h1>
+        Furry Character Gallery
+    </h1>
+
+    <p>
+        Merphy's Character Gallery
+    </p>
+
+</header>
+
+
+<!-- =====================================================
+     搜索框
+     ===================================================== -->
+
+<div id="search-area">
+
+    <input
+        id="search-box"
+        type="text"
+        placeholder="搜索角色名或图片编号，例如：玉、1、玉 1"
+        autocomplete="off"
+    >
+
+
+    <div id="search-info">
+
+        支持角色名称、精确图片编号，以及组合搜索
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     总统计
+     ===================================================== -->
+
+<div id="statistics"></div>
+
+
+<!-- =====================================================
+     加载
+     ===================================================== -->
+
+<div id="loading">
+
+    正在读取图库……
+
+</div>
+
+
+<div id="error"></div>
+
+
+<div id="no-results">
+
+    没有找到符合条件的图片。
+
+</div>
+
+
+<!-- =====================================================
+     角色
+     ===================================================== -->
+
+<main id="characters"></main>
+
+
+<!-- =====================================================
+     Lightbox
+     ===================================================== -->
+
+<div id="lightbox">
+
+
+    <button
+        class="lightbox-close"
+        onclick="closeLightbox()"
+    >
+
+        ×
+
+    </button>
+
+
+    <button
+        class="lightbox-button lightbox-prev"
+        onclick="previousImage()"
+    >
+
+        ‹
+
+    </button>
+
+
+    <img
+        id="lightbox-image"
+        src=""
+        alt="Preview"
+    >
+
+
+    <button
+        class="lightbox-button lightbox-next"
+        onclick="nextImage()"
+    >
+
+        ›
+
+    </button>
+
+
+    <div id="lightbox-info"></div>
+
+
+</div>
+
+
+<script>
+
+/* =========================================================
+   全局状态
+   ========================================================= */
+
+let galleryData = [];
+
+let currentImages = [];
+
+let currentIndex = 0;
+
+let currentCharacterName = "";
+
+
+/* =========================================================
+   读取 gallery.json
+   ========================================================= */
+
+async function loadGallery() {
+
+    const loading =
+        document.getElementById(
+            "loading"
+        );
+
+
+    const container =
+        document.getElementById(
+            "characters"
+        );
+
+
+    const error =
+        document.getElementById(
+            "error"
+        );
+
+
+    try {
+
+        /*
+         * 使用时间戳避免读取旧缓存
+         */
+
+        const response =
+            await fetch(
+                `gallery.json?t=${Date.now()}`
+            );
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                `无法读取 gallery.json：${response.status}`
+            );
+
+        }
+
+
+        const data =
+            await response.json();
+
+
+        galleryData =
+            data.characters || [];
+
+
+        /*
+         * 创建角色
+         */
+
+        galleryData.forEach(
+            character => {
+
+                const section =
+                    createCharacterGallery(
+                        character
+                    );
+
+
+                container.appendChild(
+                    section
+                );
+
+            }
+        );
+
+
+        /*
+         * 更新统计
+         */
+
+        updateStatistics();
+
+
+        /*
+         * 隐藏加载
+         */
+
+        loading.style.display =
+            "none";
+
+
+        /*
+         * 启用搜索
+         */
+
+        document
+            .getElementById(
+                "search-box"
+            )
+            .addEventListener(
+                "input",
+                performSearch
+            );
+
+
+    } catch (err) {
+
+        console.error(err);
+
+
+        loading.style.display =
+            "none";
+
+
+        error.style.display =
+            "block";
+
+
+        error.innerHTML = `
+
+            <strong>
+                读取图库失败。
+            </strong>
+
+            <br><br>
+
+            ${err.message}
+
+            <br><br>
+
+            请确认仓库根目录存在
+            <strong>gallery.json</strong>。
+
+        `;
+
+    }
+
+}
+
+
+/* =========================================================
+   创建角色画廊
+   ========================================================= */
+
+function createCharacterGallery(
+    character
+) {
+
+    const section =
+        document.createElement(
+            "section"
+        );
+
+
+    section.className =
+        "character";
+
+
+    /*
+     * =====================================================
+     * 标题
+     * =====================================================
+     */
+
+    const title =
+        document.createElement(
+            "div"
+        );
+
+
+    title.className =
+        "character-title";
+
+
+    const heading =
+        document.createElement(
+            "h2"
+        );
+
+
+    heading.textContent =
+        character.name;
+
+
+    const count =
+        document.createElement(
+            "span"
+        );
+
+
+    count.textContent =
+        `${character.images.length} 张图片`;
+
+
+    title.appendChild(
+        heading
+    );
+
+
+    title.appendChild(
+        count
+    );
+
+
+    /*
+     * =====================================================
+     * 画廊容器
+     * =====================================================
+     */
+
+    const wrapper =
+        document.createElement(
+            "div"
+        );
+
+
+    wrapper.className =
+        "gallery-wrapper";
+
+
+    const gallery =
+        document.createElement(
+            "div"
+        );
+
+
+    gallery.className =
+        "gallery";
+
+
+    /*
+     * =====================================================
+     * 图片
+     * =====================================================
+     */
+
+    character.images.forEach(
+        (
+            imagePath,
+            index
+        ) => {
+
+            const card =
+                document.createElement(
+                    "div"
+                );
+
+
+            card.className =
+                "image-card";
+
+
+            /*
+             * 搜索用数据
+             */
+
+            card.dataset.character =
+                character.name;
+
+
+            card.dataset.filename =
+                getFilename(
+                    imagePath
+                );
+
+
+            /*
+             * 图片
+             */
+
+            const img =
+                document.createElement(
+                    "img"
+                );
+
+
+            img.src =
+                imagePath;
+
+
+            img.alt =
+                `${character.name} ${getFilename(imagePath)}`;
+
+
+            img.loading =
+                "lazy";
+
+
+            /*
+             * 图片编号
+             */
+
+            const number =
+                document.createElement(
+                    "div"
+                );
+
+
+            number.className =
+                "image-number";
+
+
+            number.textContent =
+                getFilename(
+                    imagePath
+                );
+
+
+            /*
+             * 添加元素
+             */
+
+            card.appendChild(
+                img
+            );
+
+
+            card.appendChild(
+                number
+            );
+
+
+            /*
+             * 点击打开 Lightbox
+             */
+
+            card.addEventListener(
+                "click",
+                () => {
+
+                    openLightbox(
+                        character.images,
+                        index,
+                        character.name
+                    );
+
+                }
+            );
+
+
+            gallery.appendChild(
+                card
+            );
+
+        }
+    );
+
+
+    /*
+     * =====================================================
+     * 左按钮
+     * =====================================================
+     */
+
+    const leftButton =
+        document.createElement(
+            "button"
+        );
+
+
+    leftButton.className =
+        "scroll-button scroll-left";
+
+
+    leftButton.textContent =
+        "‹";
+
+
+    leftButton.onclick =
+        () => {
+
+            gallery.scrollBy({
+
+                left: -700,
+
+                behavior: "smooth"
+
+            });
+
+        };
+
+
+    /*
+     * =====================================================
+     * 右按钮
+     * =====================================================
+     */
+
+    const rightButton =
+        document.createElement(
+            "button"
+        );
+
+
+    rightButton.className =
+        "scroll-button scroll-right";
+
+
+    rightButton.textContent =
+        "›";
+
+
+    rightButton.onclick =
+        () => {
+
+            gallery.scrollBy({
+
+                left: 700,
+
+                behavior: "smooth"
+
+            });
+
+        };
+
+
+    /*
+     * =====================================================
+     * 组合
+     * =====================================================
+     */
+
+    wrapper.appendChild(
+        leftButton
+    );
+
+
+    wrapper.appendChild(
+        gallery
+    );
+
+
+    wrapper.appendChild(
+        rightButton
+    );
+
+
+    section.appendChild(
+        title
+    );
+
+
+    section.appendChild(
+        wrapper
+    );
+
+
+    return section;
+
+}
+
+
+/* =========================================================
+   获取文件名
+   ========================================================= */
+
+function getFilename(
+    path
+) {
+
+    return path
+        .split("/")
+        .pop();
+
+}
+
+
+/* =========================================================
+   获取图片编号
+   ========================================================= */
+
+function getImageNumber(
+    filename
+) {
+
+    /*
+     * 只接受：
+     *
+     * 1.jpg
+     * 15.jpg
+     * 123.png
+     *
+     * 不接受：
+     *
+     * image1.jpg
+     * 1_test.jpg
+     */
+
+    const match =
+        filename.match(
+            /^(\d+)(?:\.[^.]+)?$/i
+        );
+
+
+    if (!match) {
+
+        return null;
+
+    }
+
+
+    return match[1];
+
+}
+
+
+/* =========================================================
+   搜索
+   ========================================================= */
+
+function performSearch() {
+
+    const searchBox =
+        document.getElementById(
+            "search-box"
+        );
+
+
+    const input =
+        searchBox.value.trim();
+
+
+    const sections =
+        document.querySelectorAll(
+            ".character"
+        );
+
+
+    const noResults =
+        document.getElementById(
+            "no-results"
+        );
+
+
+    const searchInfo =
+        document.getElementById(
+            "search-info"
+        );
+
+
+    /*
+     * =====================================================
+     * 空搜索
+     *
+     * 无论之前是什么搜索状态，
+     * 只要搜索框为空，
+     * 强制恢复全部内容。
+     *
+     * 这是针对快速连续 Backspace
+     * 的修复。
+     * =====================================================
+     */
+
+    if (input === "") {
+
+        sections.forEach(
+            section => {
+
+                /*
+                 * 恢复角色
+                 */
+
+                section.classList.remove(
+                    "filtered-out"
+                );
+
+
+                /*
+                 * 恢复所有图片
+                 */
+
+                const cards =
+                    section.querySelectorAll(
+                        ".image-card"
+                    );
+
+
+                cards.forEach(
+                    card => {
+
+                        card.classList.remove(
+                            "search-hidden"
+                        );
+
+                    }
+                );
+
+            }
+        );
+
+
+        /*
+         * 恢复搜索提示
+         */
+
+        searchInfo.textContent =
+            "支持角色名称、精确图片编号，以及组合搜索";
+
+
+        /*
+         * 隐藏无结果
+         */
+
+        noResults.style.display =
+            "none";
+
+
+        return;
+
+    }
+
+
+    /*
+     * =====================================================
+     * 搜索条件
+     *
+     * 例如：
+     *
+     * 玉 1
+     *
+     * ↓
+     *
+     * ["玉", "1"]
+     * =====================================================
+     */
+
+    const tokens =
+        input
+            .toLowerCase()
+            .split(/\s+/)
+            .filter(Boolean);
+
+
+    let visibleImages = 0;
+
+    let visibleCharacters = 0;
+
+
+    /*
+     * =====================================================
+     * 遍历角色
+     * =====================================================
+     */
+
+    sections.forEach(
+        section => {
+
+            const characterTitle =
+                section.querySelector(
+                    ".character-title h2"
+                );
+
+
+            if (!characterTitle) {
+
+                return;
+
+            }
+
+
+            const characterName =
+                characterTitle.textContent
+                    .toLowerCase();
+
+
+            const cards =
+                section.querySelectorAll(
+                    ".image-card"
+                );
+
+
+            let characterHasMatch =
+                false;
+
+
+            /*
+             * =================================================
+             * 遍历图片
+             * =================================================
+             */
+
+            cards.forEach(
+                card => {
+
+                    const filename =
+                        (
+                            card.dataset.filename ||
+                            ""
+                        )
+                        .toLowerCase();
+
+
+                    const imageNumber =
+                        getImageNumber(
+                            filename
+                        );
+
+
+                    /*
+                     * 每一个搜索词
+                     * 都必须满足。
+                     */
+
+                    const matched =
+                        tokens.every(
+                            token => {
+
+                                /*
+                                 * 数字搜索
+                                 *
+                                 * 精确匹配编号。
+                                 *
+                                 * 搜索 1：
+                                 *
+                                 * ✓ 1.jpg
+                                 *
+                                 * ✗ 11.jpg
+                                 * ✗ 21.jpg
+                                 */
+
+                                if (
+                                    /^\d+$/.test(
+                                        token
+                                    )
+                                ) {
+
+                                    return (
+                                        imageNumber ===
+                                        token
+                                    );
+
+                                }
+
+
+                                /*
+                                 * 文字搜索
+                                 *
+                                 * 匹配角色名。
+                                 */
+
+                                return characterName.includes(
+                                    token
+                                );
+
+                            }
+                        );
+
+
+                    /*
+                     * =================================================
+                     * 更新图片状态
+                     * =================================================
+                     */
+
+                    if (matched) {
+
+                        card.classList.remove(
+                            "search-hidden"
+                        );
+
+
+                        characterHasMatch =
+                            true;
+
+
+                        visibleImages++;
+
+
+                    } else {
+
+                        card.classList.add(
+                            "search-hidden"
+                        );
+
+                    }
+
+                }
+            );
+
+
+            /*
+             * =================================================
+             * 更新角色状态
+             * =================================================
+             */
+
+            if (characterHasMatch) {
+
+                section.classList.remove(
+                    "filtered-out"
+                );
+
+
+                visibleCharacters++;
+
+
+            } else {
+
+                section.classList.add(
+                    "filtered-out"
+                );
+
+            }
+
+        }
+    );
+
+
+    /*
+     * =====================================================
+     * 搜索统计
+     * =====================================================
+     */
+
+    searchInfo.textContent =
+        `找到 ${visibleCharacters} 个角色，${visibleImages} 张图片`;
+
+
+    /*
+     * =====================================================
+     * 无结果
+     * =====================================================
+     */
+
+    if (
+        visibleImages === 0
+    ) {
+
+        noResults.style.display =
+            "block";
+
+    } else {
+
+        noResults.style.display =
+            "none";
+
+    }
+
+}
+
+
+/* =========================================================
+   总统计
+   ========================================================= */
+
+function updateStatistics() {
+
+    const totalCharacters =
+        galleryData.length;
+
+
+    const totalImages =
+        galleryData.reduce(
+            (
+                total,
+                character
+            ) => {
+
+                return (
+                    total +
+                    character.images.length
+                );
+
+            },
+            0
+        );
+
+
+    document
+        .getElementById(
+            "statistics"
+        )
+        .textContent =
+        `${totalCharacters} 个角色 · ${totalImages} 张图片`;
+
+}
+
+
+/* =========================================================
+   Lightbox
+   ========================================================= */
+
+function openLightbox(
+    images,
+    index,
+    characterName
+) {
+
+    currentImages =
+        images;
+
+
+    currentIndex =
+        index;
+
+
+    currentCharacterName =
+        characterName;
+
+
+    updateLightbox();
+
+
+    document
+        .getElementById(
+            "lightbox"
+        )
+        .classList
+        .add("active");
+
+
+    document.body.style.overflow =
+        "hidden";
+
+}
+
+
+/* =========================================================
+   更新 Lightbox
+   ========================================================= */
+
+function updateLightbox() {
+
+    if (
+        !currentImages ||
+        currentImages.length === 0
+    ) {
+
+        return;
+
+    }
+
+
+    const image =
+        currentImages[
+            currentIndex
+        ];
+
+
+    const filename =
+        getFilename(
+            image
+        );
+
+
+    document
+        .getElementById(
+            "lightbox-image"
+        )
+        .src =
+        image;
+
+
+    document
+        .getElementById(
+            "lightbox-info"
+        )
+        .textContent =
+        `${currentCharacterName} · ${filename} · ${currentIndex + 1} / ${currentImages.length}`;
+
+}
+
+
+/* =========================================================
+   关闭 Lightbox
+   ========================================================= */
+
+function closeLightbox() {
+
+    document
+        .getElementById(
+            "lightbox"
+        )
+        .classList
+        .remove("active");
+
+
+    document.body.style.overflow =
+        "";
+
+}
+
+
+/* =========================================================
+   上一张
+   ========================================================= */
+
+function previousImage() {
+
+    if (
+        !currentImages ||
+        currentImages.length === 0
+    ) {
+
+        return;
+
+    }
+
+
+    currentIndex--;
+
+
+    if (
+        currentIndex < 0
+    ) {
+
+        currentIndex =
+            currentImages.length - 1;
+
+    }
+
+
+    updateLightbox();
+
+}
+
+
+/* =========================================================
+   下一张
+   ========================================================= */
+
+function nextImage() {
+
+    if (
+        !currentImages ||
+        currentImages.length === 0
+    ) {
+
+        return;
+
+    }
+
+
+    currentIndex++;
+
+
+    if (
+        currentIndex >=
+        currentImages.length
+    ) {
+
+        currentIndex = 0;
+
+    }
+
+
+    updateLightbox();
+
+}
+
+
+/* =========================================================
+   键盘操作
+   ========================================================= */
+
+document.addEventListener(
+    "keydown",
+    event => {
+
+        const lightbox =
+            document.getElementById(
+                "lightbox"
+            );
+
+
+        /*
+         * Lightbox 没打开时不处理
+         */
+
+        if (
+            !lightbox.classList.contains(
+                "active"
+            )
+        ) {
+
+            return;
+
+        }
+
+
+        /*
+         * 上一张
+         */
+
+        if (
+            event.key ===
+            "ArrowLeft"
+        ) {
+
+            previousImage();
+
+        }
+
+
+        /*
+         * 下一张
+         */
+
+        if (
+            event.key ===
+            "ArrowRight"
+        ) {
+
+            nextImage();
+
+        }
+
+
+        /*
+         * ESC
+         */
+
+        if (
+            event.key ===
+            "Escape"
+        ) {
+
+            closeLightbox();
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   点击黑色背景关闭
+   ========================================================= */
+
+document
+    .getElementById(
+        "lightbox"
+    )
+    .addEventListener(
+        "click",
+        event => {
+
+            if (
+                event.target.id ===
+                "lightbox"
+            ) {
+
+                closeLightbox();
+
+            }
+
+        }
+    );
+
+
+/* =========================================================
+   启动
+   ========================================================= */
+
+loadGallery();
+
+</script>
+
+
+</body>
+
+</html>

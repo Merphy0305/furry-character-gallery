@@ -1,0 +1,170 @@
+name: Update Gallery JSON
+
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - gallery.json
+
+permissions:
+  contents: write
+
+jobs:
+  update-gallery:
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Generate gallery.json
+        shell: python
+        run: |
+          import json
+          import os
+
+          root = "."
+
+          image_extensions = {
+              ".jpg",
+              ".jpeg",
+              ".png",
+              ".webp",
+              ".gif"
+          }
+
+          ignored_folders = {
+              ".git",
+              ".github"
+          }
+
+          def is_image(filename):
+              extension = os.path.splitext(filename)[1].lower()
+              return extension in image_extensions
+
+          def image_sort_key(filename):
+              name = os.path.splitext(filename)[0]
+
+              if name.isdigit():
+                  return (0, int(name))
+
+              return (1, name.lower())
+
+          characters = []
+
+          folders = []
+
+          for name in os.listdir(root):
+
+              path = os.path.join(root, name)
+
+              if not os.path.isdir(path):
+                  continue
+
+              if name in ignored_folders:
+                  continue
+
+              if name.startswith("."):
+                  continue
+
+              folders.append(name)
+
+          folders.sort(key=lambda x: x.lower())
+
+          for character_name in folders:
+
+              character_path = os.path.join(
+                  root,
+                  character_name
+              )
+
+              images = []
+
+              for filename in os.listdir(character_path):
+
+                  filepath = os.path.join(
+                      character_path,
+                      filename
+                  )
+
+                  if not os.path.isfile(filepath):
+                      continue
+
+                  if not is_image(filename):
+                      continue
+
+                  images.append(filename)
+
+              images.sort(key=image_sort_key)
+
+              if not images:
+                  continue
+
+              image_paths = []
+
+              for filename in images:
+
+                  image_paths.append(
+                      character_name + "/" + filename
+                  )
+
+              characters.append({
+                  "name": character_name,
+                  "images": image_paths
+              })
+
+          data = {
+              "characters": characters
+          }
+
+          with open(
+              "gallery.json",
+              "w",
+              encoding="utf-8"
+          ) as file:
+
+              json.dump(
+                  data,
+                  file,
+                  ensure_ascii=False,
+                  indent=4
+              )
+
+          total_characters = len(characters)
+
+          total_images = sum(
+              len(character["images"])
+              for character in characters
+          )
+
+          print("===================================")
+          print("Gallery JSON generated.")
+          print(f"Characters: {total_characters}")
+          print(f"Images: {total_images}")
+          print("===================================")
+
+      - name: Commit gallery.json
+        run: |
+
+          git config user.name \
+            "github-actions[bot]"
+
+          git config user.email \
+            "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add gallery.json
+
+          if git diff --cached --quiet; then
+
+            echo "gallery.json is already up to date."
+
+          else
+
+            git commit \
+              -m "Auto update gallery.json"
+
+            git push
+
+          fi

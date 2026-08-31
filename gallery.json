@@ -1,0 +1,35 @@
+{
+    "characters": [
+        {
+            "name": "Kazami_Hayaba",
+            "images": [
+                "Kazami_Hayaba/00014-2411516386.png",
+                "Kazami_Hayaba/00023-1397727126.png",
+                "Kazami_Hayaba/00037-2875936922.png",
+                "Kazami_Hayaba/normal_standing.png"
+            ]
+        },
+        {
+            "name": "Smolder",
+            "images": [
+                "Smolder/1.jpg",
+                "Smolder/2.jpg",
+                "Smolder/3.jpg",
+                "Smolder/4.jpg",
+                "Smolder/5.jpg",
+                "Smolder/6.jpg",
+                "Smolder/7.jpg",
+                "Smolder/8.jpg",
+                "Smolder/9.jpg",
+                "Smolder/10.jpg",
+                "Smolder/11.jpg",
+                "Smolder/12.jpg",
+                "Smolder/13.jpg",
+                "Smolder/14.jpg",
+                "Smolder/15.jpg",
+                "Smolder/16.jpg",
+                "Smolder/17.jpg"
+            ]
+        }
+    ]
+}
