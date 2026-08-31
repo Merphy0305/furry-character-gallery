@@ -40,6 +40,12 @@ body {
         "Segoe UI",
         "Microsoft YaHei",
         sans-serif;
+
+    /*
+     * 防止移动浏览器上下滑动时产生
+     * overscroll / 橡皮筋效果。
+     */
+    overscroll-behavior-y: none;
 }
 
 body {
@@ -47,20 +53,32 @@ body {
     position: relative;
 }
 
+
+/* =========================================================
+   独立固定背景层
+   ========================================================= */
+
 /*
- * 独立固定背景层。
+ * 使用独立 fixed 层，而不是 background-attachment: fixed。
  *
- * 不再使用 background-attachment: fixed。
- * 这样可以避免 Android / iOS 移动浏览器在上下滑动时，
- * 背景跟着页面移动，然后松手弹回的问题。
+ * 注意：
+ *
+ * 这里故意不使用 transform: translateZ(0)。
+ *
+ * 某些 Android / iOS 移动浏览器会因为
+ * translateZ(0) 创建独立合成层，
+ * 导致页面上下滑动时背景跟着移动，
+ * 松手后又弹回原位置。
  */
 
 #background-layer {
     position: fixed;
-    inset: 0;
 
-    width: 100%;
-    height: 100%;
+    top: 0;
+    left: 0;
+
+    width: 100vw;
+    height: 100vh;
 
     z-index: 0;
     pointer-events: none;
@@ -73,11 +91,10 @@ body {
         url("background.gif");
 
     background-size: cover;
-    background-position: center;
+    background-position: center center;
     background-repeat: no-repeat;
-
-    transform: translateZ(0);
 }
+
 
 /*
  * 所有实际页面内容放在背景层上面。
@@ -151,6 +168,7 @@ header p {
         30px;
 }
 
+
 /*
  * 搜索栏整体。
  */
@@ -184,6 +202,7 @@ header p {
         0 0 15px
         rgba(255,255,255,0.06);
 }
+
 
 /*
  * 点击标签后出现的搜索标签。
@@ -260,6 +279,7 @@ header p {
 
     color: white;
 }
+
 
 /*
  * 实际输入框。
@@ -866,6 +886,30 @@ header p {
 
 @media (max-width: 700px) {
 
+    /*
+     * 移动端进一步禁止纵向 overscroll。
+     */
+
+    html,
+    body {
+        overscroll-behavior-y: none;
+    }
+
+    /*
+     * 手机端背景保持固定在视觉区域中央。
+     */
+
+    #background-layer {
+        width: 100vw;
+        height: 100vh;
+
+        top: 0;
+        left: 0;
+
+        background-position: center center;
+    }
+
+
     header {
         padding:
             25px
@@ -957,7 +1001,10 @@ header p {
 
 <body>
 
-<!-- 独立固定背景层，避免移动端背景随页面弹动。 -->
+<!-- =====================================================
+     固定背景
+     ===================================================== -->
+
 <div id="background-layer"></div>
 
 
@@ -982,7 +1029,6 @@ header p {
 
     <div id="search-panel">
 
-        <!-- 点击角色 Tag 后，会在这里生成可删除的搜索 Tag。 -->
         <div id="selected-tags"></div>
 
         <input
@@ -1085,15 +1131,6 @@ let currentIndex = 0;
 
 let currentCharacterName = "";
 
-/*
- * 当前通过点击 Tag 加入的筛选条件。
- *
- * 这里保存 Tag 的原始显示文字。
- * 比如：
- *
- * ["LoL", "龙"]
- */
-
 let selectedTags = [];
 
 
@@ -1120,10 +1157,6 @@ async function loadGallery() {
 
     try {
 
-        /*
-         * 使用时间戳避免读取旧缓存。
-         */
-
         const response =
             await fetch(
                 `gallery.json?t=${Date.now()}`
@@ -1145,9 +1178,6 @@ async function loadGallery() {
                 ? data.characters
                 : [];
 
-        /*
-         * 创建角色。
-         */
 
         galleryData.forEach(
             character => {
@@ -1164,22 +1194,13 @@ async function loadGallery() {
             }
         );
 
-        /*
-         * 更新统计。
-         */
 
         updateStatistics();
 
-        /*
-         * 隐藏加载。
-         */
 
         loading.style.display =
             "none";
 
-        /*
-         * 启用搜索。
-         */
 
         document
             .getElementById(
@@ -1189,6 +1210,7 @@ async function loadGallery() {
                 "input",
                 performSearch
             );
+
 
         renderSelectedTags();
 
@@ -1235,6 +1257,7 @@ function createCharacterGallery(
     section.className =
         "character";
 
+
     /*
      * =====================================================
      * 标题
@@ -1249,6 +1272,7 @@ function createCharacterGallery(
     title.className =
         "character-title";
 
+
     const heading =
         document.createElement(
             "h2"
@@ -1256,6 +1280,7 @@ function createCharacterGallery(
 
     heading.textContent =
         formatCharacterName(character);
+
 
     const count =
         document.createElement(
@@ -1267,6 +1292,7 @@ function createCharacterGallery(
 
     count.textContent =
         `${character.images.length} 张图片`;
+
 
     title.appendChild(
         heading
@@ -1326,6 +1352,7 @@ function createCharacterGallery(
         tagContainer.className =
             "character-tags";
 
+
         character.tags.forEach(
             tag => {
 
@@ -1346,6 +1373,7 @@ function createCharacterGallery(
                 tagButton.title =
                     `搜索标签：${tag}`;
 
+
                 tagButton.addEventListener(
                     "click",
                     () => {
@@ -1357,12 +1385,14 @@ function createCharacterGallery(
                     }
                 );
 
+
                 tagContainer.appendChild(
                     tagButton
                 );
 
             }
         );
+
 
         section.appendChild(
             tagContainer
@@ -1384,6 +1414,7 @@ function createCharacterGallery(
 
     wrapper.className =
         "gallery-wrapper";
+
 
     const gallery =
         document.createElement(
@@ -1414,12 +1445,10 @@ function createCharacterGallery(
             card.className =
                 "image-card";
 
-            /*
-             * 搜索用数据。
-             */
 
             card.dataset.characterId =
                 character.id || "";
+
 
             card.dataset.filename =
                 getFilename(
@@ -1465,7 +1494,7 @@ function createCharacterGallery(
 
 
             /*
-             * 添加元素。
+             * 添加元素
              */
 
             card.appendChild(
@@ -1478,7 +1507,7 @@ function createCharacterGallery(
 
 
             /*
-             * 点击打开 Lightbox。
+             * 点击打开 Lightbox
              */
 
             card.addEventListener(
@@ -1493,6 +1522,7 @@ function createCharacterGallery(
 
                 }
             );
+
 
             gallery.appendChild(
                 card
@@ -1526,6 +1556,7 @@ function createCharacterGallery(
         "aria-label",
         "向左滚动"
     );
+
 
     leftButton.onclick =
         () => {
@@ -1566,6 +1597,7 @@ function createCharacterGallery(
         "向右滚动"
     );
 
+
     rightButton.onclick =
         () => {
 
@@ -1602,6 +1634,7 @@ function createCharacterGallery(
         wrapper
     );
 
+
     return section;
 
 }
@@ -1622,11 +1655,13 @@ function formatCharacterName(
             ""
         ).trim();
 
+
     const nameEn =
         String(
             character.name_en ||
             ""
         ).trim();
+
 
     if (
         name &&
@@ -1638,6 +1673,7 @@ function formatCharacterName(
         return `${name} / ${nameEn}`;
 
     }
+
 
     return name || nameEn;
 
@@ -1667,29 +1703,18 @@ function getImageNumber(
     filename
 ) {
 
-    /*
-     * 只接受：
-     *
-     * 1.jpg
-     * 15.jpg
-     * 123.png
-     *
-     * 不接受：
-     *
-     * image1.jpg
-     * 1_test.jpg
-     */
-
     const match =
         filename.match(
             /^(\d+)(?:\.[^.]+)?$/i
         );
+
 
     if (!match) {
 
         return null;
 
     }
+
 
     return match[1];
 
@@ -1737,6 +1762,7 @@ function getCharacterSearchText(
 
     ];
 
+
     return fields
         .map(normalizeText)
         .filter(Boolean)
@@ -1749,18 +1775,6 @@ function getCharacterSearchText(
    Tag 搜索
    ========================================================= */
 
-/*
- * 点击页面上的 Tag：
- *
- * #LoL
- *
- * ↓
- *
- * [ LoL × ]
- *
- * 如果已经存在，就不会重复添加。
- */
-
 function addTagFilter(
     tag
 ) {
@@ -1768,9 +1782,13 @@ function addTagFilter(
     const normalized =
         normalizeText(tag);
 
+
     if (!normalized) {
+
         return;
+
     }
+
 
     const exists =
         selectedTags.some(
@@ -1779,6 +1797,7 @@ function addTagFilter(
                 normalized
         );
 
+
     if (!exists) {
 
         selectedTags.push(
@@ -1786,6 +1805,7 @@ function addTagFilter(
         );
 
     }
+
 
     renderSelectedTags();
 
@@ -1806,13 +1826,17 @@ function removeTagFilter(
         index < 0 ||
         index >= selectedTags.length
     ) {
+
         return;
+
     }
+
 
     selectedTags.splice(
         index,
         1
     );
+
 
     renderSelectedTags();
 
@@ -1832,7 +1856,9 @@ function renderSelectedTags() {
             "selected-tags"
         );
 
+
     container.innerHTML = "";
+
 
     selectedTags.forEach(
         (
@@ -1848,6 +1874,7 @@ function renderSelectedTags() {
             chip.className =
                 "search-tag";
 
+
             const text =
                 document.createElement(
                     "span"
@@ -1855,6 +1882,7 @@ function renderSelectedTags() {
 
             text.textContent =
                 tag;
+
 
             const close =
                 document.createElement(
@@ -1870,10 +1898,12 @@ function renderSelectedTags() {
             close.textContent =
                 "×";
 
+
             close.setAttribute(
                 "aria-label",
                 `删除标签 ${tag}`
             );
+
 
             close.addEventListener(
                 "click",
@@ -1886,6 +1916,7 @@ function renderSelectedTags() {
                 }
             );
 
+
             chip.appendChild(
                 text
             );
@@ -1893,6 +1924,7 @@ function renderSelectedTags() {
             chip.appendChild(
                 close
             );
+
 
             container.appendChild(
                 chip
@@ -1915,38 +1947,31 @@ function performSearch() {
             "search-box"
         );
 
+
     const input =
         searchBox.value.trim();
+
 
     const sections =
         document.querySelectorAll(
             ".character"
         );
 
+
     const noResults =
         document.getElementById(
             "no-results"
         );
+
 
     const searchInfo =
         document.getElementById(
             "search-info"
         );
 
+
     /*
-     * =====================================================
      * 自由文字搜索条件
-     *
-     * 例如：
-     *
-     * 玉 1
-     *
-     * ↓
-     *
-     * ["玉", "1"]
-     *
-     * 每个条件都必须满足。
-     * =====================================================
      */
 
     const textTokens =
@@ -1955,9 +1980,9 @@ function performSearch() {
             .split(/\s+/)
             .filter(Boolean);
 
+
     /*
-     * 完全没有任何搜索条件时，
-     * 恢复所有内容。
+     * 没有任何搜索条件
      */
 
     if (
@@ -1972,10 +1997,12 @@ function performSearch() {
                     "filtered-out"
                 );
 
+
                 const cards =
                     section.querySelectorAll(
                         ".image-card"
                     );
+
 
                 cards.forEach(
                     card => {
@@ -1990,11 +2017,14 @@ function performSearch() {
             }
         );
 
+
         searchInfo.textContent =
             "支持中文、英文、昵称、标签和精确图片编号；点击标签可加入筛选";
 
+
         noResults.style.display =
             "none";
+
 
         return;
 
@@ -2007,9 +2037,7 @@ function performSearch() {
 
 
     /*
-     * =====================================================
      * 遍历角色
-     * =====================================================
      */
 
     sections.forEach(
@@ -2023,6 +2051,7 @@ function performSearch() {
                     ?.dataset
                     .characterId;
 
+
             const character =
                 galleryData.find(
                     item =>
@@ -2030,18 +2059,16 @@ function performSearch() {
                         String(characterId)
                 );
 
+
             if (!character) {
+
                 return;
+
             }
 
 
             /*
-             * 角色全部可搜索字段：
-             *
-             * name
-             * name_en
-             * aliases
-             * tags
+             * 角色搜索文本
              */
 
             const searchText =
@@ -2051,23 +2078,14 @@ function performSearch() {
 
 
             /*
-             * =================================================
              * Tag 条件
-             *
-             * 点击 Tag 后使用精确标签匹配。
-             *
-             * 例如：
-             *
-             * [LoL ×] [龙 ×]
-             *
-             * 必须同时拥有 LoL 和 龙。
-             * =================================================
              */
 
             const characterTags =
                 Array.isArray(character.tags)
                     ? character.tags
                     : [];
+
 
             const normalizedCharacterTags =
                 characterTags.map(
@@ -2090,14 +2108,13 @@ function performSearch() {
                     ".image-card"
                 );
 
+
             let characterHasMatch =
                 false;
 
 
             /*
-             * =================================================
              * 遍历图片
-             * =================================================
              */
 
             cards.forEach(
@@ -2110,6 +2127,7 @@ function performSearch() {
                         )
                         .toLocaleLowerCase();
 
+
                     const imageNumber =
                         getImageNumber(
                             filename
@@ -2117,7 +2135,7 @@ function performSearch() {
 
 
                     /*
-                     * 每个文字搜索词都必须满足。
+                     * 每个文字搜索词都必须满足
                      */
 
                     const textMatched =
@@ -2127,13 +2145,7 @@ function performSearch() {
                                 /*
                                  * 数字搜索：
                                  *
-                                 * 精确匹配图片编号。
-                                 *
-                                 * 搜索 1：
-                                 *
-                                 * ✓ 1.jpg
-                                 * ✗ 11.jpg
-                                 * ✗ 21.jpg
+                                 * 精确匹配图片编号
                                  */
 
                                 if (
@@ -2153,17 +2165,10 @@ function performSearch() {
                                 /*
                                  * 文字搜索：
                                  *
-                                 * 对角色名称、
+                                 * 角色名称、
                                  * 英文名、
                                  * aliases、
                                  * tags
-                                 * 做模糊包含匹配。
-                                 *
-                                 * 因此：
-                                 *
-                                 * lol → LoL
-                                 * der → Smolder
-                                 * 小龙 → alias
                                  */
 
                                 return searchText.includes(
@@ -2185,8 +2190,10 @@ function performSearch() {
                             "search-hidden"
                         );
 
+
                         characterHasMatch =
                             true;
+
 
                         visibleImages++;
 
@@ -2203,9 +2210,7 @@ function performSearch() {
 
 
             /*
-             * =================================================
              * 更新角色状态
-             * =================================================
              */
 
             if (characterHasMatch) {
@@ -2213,6 +2218,7 @@ function performSearch() {
                 section.classList.remove(
                     "filtered-out"
                 );
+
 
                 visibleCharacters++;
 
@@ -2229,9 +2235,7 @@ function performSearch() {
 
 
     /*
-     * =====================================================
      * 搜索统计
-     * =====================================================
      */
 
     searchInfo.textContent =
@@ -2239,9 +2243,7 @@ function performSearch() {
 
 
     /*
-     * =====================================================
      * 无结果
-     * =====================================================
      */
 
     if (
@@ -2269,6 +2271,7 @@ function updateStatistics() {
 
     const totalCharacters =
         galleryData.length;
+
 
     const totalImages =
         galleryData.reduce(
@@ -2316,8 +2319,10 @@ function escapeHtml(
             "div"
         );
 
+
     div.textContent =
         String(value);
+
 
     return div.innerHTML;
 
@@ -2337,13 +2342,17 @@ function openLightbox(
     currentImages =
         images;
 
+
     currentIndex =
         index;
+
 
     currentCharacterName =
         characterName;
 
+
     updateLightbox();
+
 
     document
         .getElementById(
@@ -2351,6 +2360,7 @@ function openLightbox(
         )
         .classList
         .add("active");
+
 
     document.body.style.overflow =
         "hidden";
@@ -2369,15 +2379,18 @@ function updateLightbox() {
 
     }
 
+
     const image =
         currentImages[
             currentIndex
         ];
 
+
     const filename =
         getFilename(
             image
         );
+
 
     document
         .getElementById(
@@ -2385,6 +2398,7 @@ function updateLightbox() {
         )
         .src =
         image;
+
 
     document
         .getElementById(
@@ -2405,6 +2419,7 @@ function closeLightbox() {
         .classList
         .remove("active");
 
+
     document.body.style.overflow =
         "";
 
@@ -2422,7 +2437,9 @@ function previousImage() {
 
     }
 
+
     currentIndex--;
+
 
     if (
         currentIndex < 0
@@ -2432,6 +2449,7 @@ function previousImage() {
             currentImages.length - 1;
 
     }
+
 
     updateLightbox();
 
@@ -2449,7 +2467,9 @@ function nextImage() {
 
     }
 
+
     currentIndex++;
+
 
     if (
         currentIndex >=
@@ -2459,6 +2479,7 @@ function nextImage() {
         currentIndex = 0;
 
     }
+
 
     updateLightbox();
 
@@ -2478,6 +2499,7 @@ document.addEventListener(
                 "lightbox"
             );
 
+
         if (
             !lightbox.classList.contains(
                 "active"
@@ -2488,6 +2510,7 @@ document.addEventListener(
 
         }
 
+
         if (
             event.key ===
             "ArrowLeft"
@@ -2497,6 +2520,7 @@ document.addEventListener(
 
         }
 
+
         if (
             event.key ===
             "ArrowRight"
@@ -2505,6 +2529,7 @@ document.addEventListener(
             nextImage();
 
         }
+
 
         if (
             event.key ===
