@@ -1,7 +1,12 @@
 {
     "characters": [
         {
+            "id": "Kazami_Hayaba",
             "name": "Kazami_Hayaba",
+            "name_en": "",
+            "aliases": [],
+            "description": "",
+            "tags": [],
             "images": [
                 "Kazami_Hayaba/00014-2411516386.png",
                 "Kazami_Hayaba/00023-1397727126.png",
@@ -10,7 +15,20 @@
             ]
         },
         {
-            "name": "Smolder",
+            "id": "Smolder",
+            "name": "斯莫德",
+            "name_en": "Smolder",
+            "aliases": [
+                "斯莫",
+                "小龙"
+            ],
+            "description": "来自英雄联盟的龙族少年。",
+            "tags": [
+                "LoL",
+                "龙",
+                "兽人",
+                "火焰"
+            ],
             "images": [
                 "Smolder/1.jpg",
                 "Smolder/2.jpg",
