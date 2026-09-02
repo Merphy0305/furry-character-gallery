@@ -4,7 +4,7 @@
         "name_en": "Smolder",
         "aliases": ["斯莫", "小龙"],
         "description": "来自英雄联盟的龙族少年。",
-        "tags": ["LoL", "龙",  "火焰"]
+        "tags": ["LoL", "龙", "火焰"]
     },
 
     "YuYao": {
@@ -13,15 +13,15 @@
         "aliases": [],
         "description": "来自沧岚的东方麒麟兽人。",
         "tags": ["东方", "麒麟", "兽人", "沧岚"]
-    }
+    },
 
     "XiFeng": {
         "name": "熙枫",
         "name_en": "XiFeng",
         "aliases": [],
         "description": "东方麒麟兽人。",
-        "tags": ["东方", "麒麟","macro"]
-    }
+        "tags": ["东方", "麒麟", "macro"]
+    },
 
     "Radiance": {
         "name": "焕澈",
