@@ -16,11 +16,14 @@
         },
         {
             "id": "Radiance",
-            "name": "Radiance",
-            "name_en": "",
+            "name": "焕澈",
+            "name_en": "Radiance",
             "aliases": [],
-            "description": "",
-            "tags": [],
+            "description": "某国度的神秘昏君。",
+            "tags": [
+                "狐狸",
+                "macro"
+            ],
             "images": [
                 "Radiance/1.jpg"
             ]
@@ -37,7 +40,6 @@
             "tags": [
                 "LoL",
                 "龙",
-                "兽人",
                 "火焰"
             ],
             "images": [
@@ -62,11 +64,15 @@
         },
         {
             "id": "XiFeng",
-            "name": "XiFeng",
-            "name_en": "",
+            "name": "熙枫",
+            "name_en": "XiFeng",
             "aliases": [],
-            "description": "",
-            "tags": [],
+            "description": "东方麒麟兽人。",
+            "tags": [
+                "东方",
+                "麒麟",
+                "macro"
+            ],
             "images": [
                 "XiFeng/1.jpg"
             ]
