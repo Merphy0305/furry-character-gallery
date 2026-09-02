@@ -59,6 +59,17 @@
                 "Smolder/16.jpg",
                 "Smolder/17.jpg"
             ]
+        },
+        {
+            "id": "XiFeng",
+            "name": "XiFeng",
+            "name_en": "",
+            "aliases": [],
+            "description": "",
+            "tags": [],
+            "images": [
+                "XiFeng/1.jpg"
+            ]
         }
     ]
 }
