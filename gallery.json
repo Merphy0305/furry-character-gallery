@@ -15,6 +15,17 @@
             ]
         },
         {
+            "id": "Radiance",
+            "name": "Radiance",
+            "name_en": "",
+            "aliases": [],
+            "description": "",
+            "tags": [],
+            "images": [
+                "Radiance/1.jpg"
+            ]
+        },
+        {
             "id": "Smolder",
             "name": "斯莫德",
             "name_en": "Smolder",
