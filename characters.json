@@ -30,4 +30,12 @@
         "description": "某国度的神秘昏君。",
         "tags": ["狐狸", "macro"]
     }
+    
+    "Unfinished_Realm": {
+        "name": "未完之境",
+        "name_en": "Unfinished_Realm",
+        "aliases": [],
+        "description": "来自沧岚的东方麒麟兽人。",
+        "tags": ["异世界", "冒险", "群像", "中世纪", "魔幻"]
+    },
 }
