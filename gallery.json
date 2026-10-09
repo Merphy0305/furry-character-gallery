@@ -12,6 +12,17 @@
             ]
         },
         {
+            "id": "Jin_Lien",
+            "name": "Jin_Lien",
+            "name_en": "",
+            "aliases": [],
+            "description": "",
+            "tags": [],
+            "images": [
+                "Jin_Lien/1.jpg"
+            ]
+        },
+        {
             "id": "Jonny",
             "name": "Jonny",
             "name_en": "",
