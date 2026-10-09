@@ -70,6 +70,17 @@
             ]
         },
         {
+            "id": "Lolo",
+            "name": "Lolo",
+            "name_en": "",
+            "aliases": [],
+            "description": "",
+            "tags": [],
+            "images": [
+                "Lolo/1.jpg"
+            ]
+        },
+        {
             "id": "Mori",
             "name": "莫里",
             "name_en": "Mori",
