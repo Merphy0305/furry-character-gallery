@@ -170,6 +170,17 @@
             ]
         },
         {
+            "id": "Violan",
+            "name": "Violan",
+            "name_en": "",
+            "aliases": [],
+            "description": "",
+            "tags": [],
+            "images": [
+                "Violan/1.jpg"
+            ]
+        },
+        {
             "id": "XiFeng",
             "name": "熙枫",
             "name_en": "XiFeng",
