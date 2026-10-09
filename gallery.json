@@ -2,8 +2,8 @@
     "characters": [
         {
             "id": "Hypnos",
-            "name": "Hypnos",
-            "name_en": "",
+            "name": "贤宇",
+            "name_en": "Hypnos",
             "aliases": [],
             "description": "",
             "tags": [],
@@ -13,8 +13,8 @@
         },
         {
             "id": "Jin_Lien",
-            "name": "Jin_Lien",
-            "name_en": "",
+            "name": "金令缘",
+            "name_en": "Jin_Lien",
             "aliases": [],
             "description": "",
             "tags": [],
@@ -24,8 +24,8 @@
         },
         {
             "id": "Jonny",
-            "name": "Jonny",
-            "name_en": "",
+            "name": "小鬼鲛",
+            "name_en": "Jonny",
             "aliases": [],
             "description": "",
             "tags": [],
@@ -60,8 +60,8 @@
         },
         {
             "id": "Liuxuan",
-            "name": "Liuxuan",
-            "name_en": "",
+            "name": "鎏泫",
+            "name_en": "Liuxuan",
             "aliases": [],
             "description": "",
             "tags": [],
@@ -71,8 +71,8 @@
         },
         {
             "id": "Lolo",
-            "name": "Lolo",
-            "name_en": "",
+            "name": "洛洛",
+            "name_en": "Lolo",
             "aliases": [],
             "description": "",
             "tags": [],
@@ -107,8 +107,8 @@
         },
         {
             "id": "Ranshin",
-            "name": "Ranshin",
-            "name_en": "",
+            "name": "岚",
+            "name_en": "Ranshin",
             "aliases": [],
             "description": "",
             "tags": [],
@@ -118,8 +118,8 @@
         },
         {
             "id": "Rin",
-            "name": "Rin",
-            "name_en": "",
+            "name": "凌裕",
+            "name_en": "Rin",
             "aliases": [],
             "description": "",
             "tags": [],
@@ -204,8 +204,8 @@
         },
         {
             "id": "VidarVance",
-            "name": "VidarVance",
-            "name_en": "",
+            "name": "怀达枉斯",
+            "name_en": "VidarVance",
             "aliases": [],
             "description": "",
             "tags": [],
@@ -215,8 +215,8 @@
         },
         {
             "id": "Violan",
-            "name": "Violan",
-            "name_en": "",
+            "name": "瓦尔兰",
+            "name_en": "Violan",
             "aliases": [],
             "description": "",
             "tags": [],
