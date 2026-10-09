@@ -1,6 +1,21 @@
 {
     "characters": [
         {
+            "id": "All_Hallows_Ride",
+            "name": "All_Hallows_Ride",
+            "name_en": "",
+            "aliases": [],
+            "description": "",
+            "tags": [],
+            "images": [
+                "All_Hallows_Ride/1.jpg",
+                "All_Hallows_Ride/2.jpg",
+                "All_Hallows_Ride/3.jpg",
+                "All_Hallows_Ride/4.jpg",
+                "All_Hallows_Ride/5.jpg"
+            ]
+        },
+        {
             "id": "Hypnos",
             "name": "贤宇",
             "name_en": "Hypnos",
