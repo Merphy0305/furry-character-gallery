@@ -194,6 +194,22 @@
             "images": [
                 "XiFeng/1.jpg"
             ]
+        },
+        {
+            "id": "YuYao",
+            "name": "玉尧",
+            "name_en": "Yuyao",
+            "aliases": [],
+            "description": "来自沧岚的东方麒麟兽人。",
+            "tags": [
+                "东方",
+                "麒麟",
+                "兽人",
+                "沧岚"
+            ],
+            "images": [
+                "YuYao/1.jpg"
+            ]
         }
     ]
 }
