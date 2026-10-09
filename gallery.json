@@ -29,6 +29,17 @@
             ]
         },
         {
+            "id": "Ranshin",
+            "name": "Ranshin",
+            "name_en": "",
+            "aliases": [],
+            "description": "",
+            "tags": [],
+            "images": [
+                "Ranshin/1.jpg"
+            ]
+        },
+        {
             "id": "Smolder",
             "name": "斯莫德",
             "name_en": "Smolder",
