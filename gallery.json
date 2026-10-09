@@ -37,6 +37,17 @@
             ]
         },
         {
+            "id": "Liuxuan",
+            "name": "Liuxuan",
+            "name_en": "",
+            "aliases": [],
+            "description": "",
+            "tags": [],
+            "images": [
+                "Liuxuan/1.jpg"
+            ]
+        },
+        {
             "id": "Radiance",
             "name": "焕澈",
             "name_en": "Radiance",
