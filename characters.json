@@ -1,41 +1,108 @@
 {
-    "Smolder": {
-        "name": "斯莫德",
-        "name_en": "Smolder",
-        "aliases": ["斯莫", "小龙"],
-        "description": "来自英雄联盟的龙族少年。",
-        "tags": ["LoL", "龙", "火焰"]
-    },
+"Hypnos": {
+"name": "Hypnos",
+"name_en": "",
+"aliases": [],
+"description": "",
+"tags": []
+},
 
-    "YuYao": {
-        "name": "玉尧",
-        "name_en": "Yuyao",
-        "aliases": [],
-        "description": "来自沧岚的东方麒麟兽人。",
-        "tags": ["东方", "麒麟", "兽人", "沧岚"]
-    },
+```
+"Jonny": {
+    "name": "Jonny",
+    "name_en": "",
+    "aliases": [],
+    "description": "",
+    "tags": []
+},
 
-    "XiFeng": {
-        "name": "熙枫",
-        "name_en": "XiFeng",
-        "aliases": [],
-        "description": "东方麒麟兽人。",
-        "tags": ["东方", "麒麟", "macro"]
-    },
+"Kazami_Hayaba": {
+    "name": "Kazami_Hayaba",
+    "name_en": "",
+    "aliases": [],
+    "description": "",
+    "tags": []
+},
 
-    "Radiance": {
-        "name": "焕澈",
-        "name_en": "Radiance",
-        "aliases": [],
-        "description": "某国度的神秘昏君。",
-        "tags": ["狐狸", "macro"]
-    },
-    
-    "Unfinished_Realm": {
-        "name": "未完之境",
-        "name_en": "Unfinished_Realm",
-        "aliases": [],
-        "description": "一个充满冒险与未知的异世界。",
-        "tags": ["异世界", "冒险", "群像", "中世纪", "魔幻"]
-    }
+"Liuxuan": {
+    "name": "Liuxuan",
+    "name_en": "",
+    "aliases": [],
+    "description": "",
+    "tags": []
+},
+
+"Mori": {
+    "name": "Mori",
+    "name_en": "",
+    "aliases": [],
+    "description": "",
+    "tags": []
+},
+
+"Radiance": {
+    "name": "焕澈",
+    "name_en": "Radiance",
+    "aliases": [],
+    "description": "某国度的神秘昏君。",
+    "tags": ["狐狸", "macro"]
+},
+
+"Ranshin": {
+    "name": "Ranshin",
+    "name_en": "",
+    "aliases": [],
+    "description": "",
+    "tags": []
+},
+
+"Smolder": {
+    "name": "斯莫德",
+    "name_en": "Smolder",
+    "aliases": ["斯莫", "小龙"],
+    "description": "来自英雄联盟的龙族少年。",
+    "tags": ["LoL", "龙", "火焰"]
+},
+
+"Unfinished_Realm": {
+    "name": "未完之境",
+    "name_en": "Unfinished_Realm",
+    "aliases": [],
+    "description": "一个充满冒险与未知的异世界。",
+    "tags": ["异世界", "冒险", "群像", "中世纪", "魔幻"]
+},
+
+"VidarVance": {
+    "name": "VidarVance",
+    "name_en": "",
+    "aliases": [],
+    "description": "",
+    "tags": []
+},
+
+"Violan": {
+    "name": "Violan",
+    "name_en": "",
+    "aliases": [],
+    "description": "",
+    "tags": []
+},
+
+"XiFeng": {
+    "name": "熙枫",
+    "name_en": "XiFeng",
+    "aliases": [],
+    "description": "东方麒麟兽人。",
+    "tags": ["东方", "麒麟", "macro"]
+},
+
+"YuYao": {
+    "name": "玉尧",
+    "name_en": "Yuyao",
+    "aliases": [],
+    "description": "来自沧岚的东方麒麟兽人。",
+    "tags": ["东方", "麒麟", "兽人", "沧岚"]
+}
+```
+
 }
