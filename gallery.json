@@ -48,6 +48,17 @@
             ]
         },
         {
+            "id": "Mori",
+            "name": "Mori",
+            "name_en": "",
+            "aliases": [],
+            "description": "",
+            "tags": [],
+            "images": [
+                "Mori/1.jpg"
+            ]
+        },
+        {
             "id": "Radiance",
             "name": "焕澈",
             "name_en": "Radiance",
