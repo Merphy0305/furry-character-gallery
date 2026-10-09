@@ -1,6 +1,17 @@
 {
     "characters": [
         {
+            "id": "Hypnos",
+            "name": "Hypnos",
+            "name_en": "",
+            "aliases": [],
+            "description": "",
+            "tags": [],
+            "images": [
+                "Hypnos/1.jpg"
+            ]
+        },
+        {
             "id": "Kazami_Hayaba",
             "name": "Kazami_Hayaba",
             "name_en": "",
