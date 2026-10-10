@@ -6,7 +6,10 @@
             "name_en": "All_Hallows_Ride",
             "aliases": [],
             "description": "",
-            "tags": [],
+            "tags": [
+                "奇幻",
+                "万圣节"
+            ],
             "images": [
                 "All_Hallows_Ride/1.jpg",
                 "All_Hallows_Ride/2.jpg",
