@@ -1,135 +1,170 @@
 {
-"Hypnos": {
-"name": "贤宇",
-"name_en": "Hypnos",
-"aliases": [],
-"description": "",
-"tags": []
-},
-"Jin_Lien": {
-"name": "金令缘",
-"name_en": "Jin_Lien",
-"aliases": [],
-"description": "",
-"tags": []
-},
+  "Hypnos": {
+    "name": "贤宇",
+    "name_en": "Hypnos",
+    "aliases": [],
+    "description": "",
+    "tags": []
+  },
+  "Jin_Lien": {
+    "name": "金令缘",
+    "name_en": "Jin_Lien",
+    "aliases": [],
+    "description": "",
+    "tags": []
+  },
   "All_Hallows_Ride": {
-"name": "诸圣夜行",
-"name_en": "All_Hallows_Ride",
-"aliases": [],
-"description": "",
-"tags": []
-},
-"Jonny": {
-"name": "小鬼鲛",
-"name_en": "Jonny",
-"aliases": [],
-"description": "",
-"tags": []
-},
-"Zone_Backgrounds": {
-"name": "场景背景",
-"name_en": "Backgrounds",
-"aliases": [],
-"description": "",
-"tags": []
-},
-"Kazami_Hayaba": {
-"name": "Kazami_Hayaba",
-"name_en": "",
-"aliases": [],
-"description": "",
-"tags": []
-},
-"Kazami_Saki": {
-"name": "风见笑",
-"name_en": "Kazami_Saki",
-"aliases": [],
-"description": "",
-"tags": []
-},
-"Liuxuan": {
-"name": "鎏泫",
-"name_en": "Liuxuan",
-"aliases": [],
-"description": "",
-"tags": []
-},
-"Lolo": {
-"name": "洛洛",
-"name_en": "Lolo",
-"aliases": [],
-"description": "",
-"tags": []
-},
-"Mori": {
-"name": "莫里",
-"name_en": "Mori",
-"aliases": [],
-"description": "",
-"tags": []
-},
-"Radiance": {
-"name": "焕澈",
-"name_en": "Radiance",
-"aliases": [],
-"description": "某国度的神秘昏君。",
-"tags": ["狐狸", "macro"]
-},
-"Ranshin": {
-"name": "岚",
-"name_en": "Ranshin",
-"aliases": [],
-"description": "",
-"tags": []
-},
-"Rin": {
-"name": "凌裕",
-"name_en": "Rin",
-"aliases": [],
-"description": "",
-"tags": []
-},
-"Smolder": {
-"name": "斯莫德",
-"name_en": "Smolder",
-"aliases": ["斯莫", "小龙"],
-"description": "来自英雄联盟的龙族少年。",
-"tags": ["LoL", "龙", "火焰"]
-},
-"Unfinished_Realm": {
-"name": "未完之境",
-"name_en": "Unfinished_Realm",
-"aliases": [],
-"description": "一个充满冒险与未知的异世界。",
-"tags": ["异世界", "冒险", "群像", "中世纪", "魔幻"]
-},
-"VidarVance": {
-"name": "怀达枉斯",
-"name_en": "VidarVance",
-"aliases": [],
-"description": "",
-"tags": []
-},
-"Violan": {
-"name": "瓦尔兰",
-"name_en": "Violan",
-"aliases": [],
-"description": "",
-"tags": []
-},
-"XiFeng": {
-"name": "熙枫",
-"name_en": "XiFeng",
-"aliases": [],
-"description": "东方麒麟兽人。",
-"tags": ["东方", "麒麟", "macro"]
-},
-"YuYao": {
-"name": "玉尧",
-"name_en": "Yuyao",
-"aliases": [],
-"description": "来自沧岚的东方麒麟兽人。",
-"tags": ["东方", "麒麟", "兽人", "沧岚"]
-}
+    "name": "诸圣夜行",
+    "name_en": "All_Hallows_Ride",
+    "aliases": [],
+    "description": "",
+    "tags": [
+      "奇幻",
+      "万圣节"
+    ]
+  },
+  "Jonny": {
+    "name": "小鬼鲛",
+    "name_en": "Jonny",
+    "aliases": [],
+    "description": "",
+    "tags": []
+  },
+  "Zone_Backgrounds": {
+    "name": "场景背景",
+    "name_en": "Backgrounds",
+    "aliases": [],
+    "description": "",
+    "tags": []
+  },
+  "Kazami_Hayaba": {
+    "name": "Kazami_Hayaba",
+    "name_en": "",
+    "aliases": [],
+    "description": "",
+    "tags": []
+  },
+  "Kazami_Saki": {
+    "name": "风见笑",
+    "name_en": "Kazami_Saki",
+    "aliases": [],
+    "description": "",
+    "tags": []
+  },
+  "Liuxuan": {
+    "name": "鎏泫",
+    "name_en": "Liuxuan",
+    "aliases": [],
+    "description": "",
+    "tags": []
+  },
+  "Lolo": {
+    "name": "洛洛",
+    "name_en": "Lolo",
+    "aliases": [],
+    "description": "",
+    "tags": []
+  },
+  "Mori": {
+    "name": "莫里",
+    "name_en": "Mori",
+    "aliases": [],
+    "description": "",
+    "tags": []
+  },
+  "Radiance": {
+    "name": "焕澈",
+    "name_en": "Radiance",
+    "aliases": [],
+    "description": "某国度的神秘昏君。",
+    "tags": [
+      "狐狸",
+      "macro"
+    ]
+  },
+  "Ranshin": {
+    "name": "岚",
+    "name_en": "Ranshin",
+    "aliases": [],
+    "description": "",
+    "tags": []
+  },
+  "Rin": {
+    "name": "凌裕",
+    "name_en": "Rin",
+    "aliases": [],
+    "description": "",
+    "tags": []
+  },
+  "Smolder": {
+    "name": "斯莫德",
+    "name_en": "Smolder",
+    "aliases": [
+      "斯莫",
+      "小龙"
+    ],
+    "description": "来自英雄联盟的龙族少年。",
+    "tags": [
+      "LoL",
+      "龙",
+      "火焰"
+    ]
+  },
+  "Unfinished_Realm": {
+    "name": "未完之境",
+    "name_en": "Unfinished_Realm",
+    "aliases": [],
+    "description": "一个充满冒险与未知的异世界。",
+    "tags": [
+      "异世界",
+      "冒险",
+      "群像",
+      "中世纪",
+      "魔幻"
+    ]
+  },
+  "VidarVance": {
+    "name": "怀达枉斯",
+    "name_en": "VidarVance",
+    "aliases": [],
+    "description": "",
+    "tags": []
+  },
+  "Violan": {
+    "name": "瓦尔兰",
+    "name_en": "Violan",
+    "aliases": [],
+    "description": "",
+    "tags": []
+  },
+  "XiFeng": {
+    "name": "熙枫",
+    "name_en": "XiFeng",
+    "aliases": [],
+    "description": "东方麒麟兽人。",
+    "tags": [
+      "东方",
+      "麒麟",
+      "macro"
+    ]
+  },
+  "YuYao": {
+    "name": "玉尧",
+    "name_en": "Yuyao",
+    "aliases": [],
+    "description": "来自沧岚的东方麒麟兽人。",
+    "tags": [
+      "东方",
+      "麒麟",
+      "兽人",
+      "沧岚"
+    ]
+  },
+  "Ayla": {
+    "name": "艾拉",
+    "name_en": "Ayla",
+    "aliases": [],
+    "description": "",
+    "tags": []
+  }
 }
