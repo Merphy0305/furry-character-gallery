@@ -19,6 +19,17 @@
             ]
         },
         {
+            "id": "Ayla",
+            "name": "艾拉",
+            "name_en": "Ayla",
+            "aliases": [],
+            "description": "",
+            "tags": [],
+            "images": [
+                "Ayla/1.jpg"
+            ]
+        },
+        {
             "id": "Hypnos",
             "name": "贤宇",
             "name_en": "Hypnos",
