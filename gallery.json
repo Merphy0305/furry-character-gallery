@@ -269,6 +269,30 @@
             "images": [
                 "YuYao/1.jpg"
             ]
+        },
+        {
+            "id": "Zone_Backgrounds",
+            "name": "Zone_Backgrounds",
+            "name_en": "",
+            "aliases": [],
+            "description": "",
+            "tags": [],
+            "images": [
+                "Zone_Backgrounds/1.jpg",
+                "Zone_Backgrounds/2.jpg",
+                "Zone_Backgrounds/3.jpg",
+                "Zone_Backgrounds/4.jpg",
+                "Zone_Backgrounds/5.jpg",
+                "Zone_Backgrounds/6.jpg",
+                "Zone_Backgrounds/7.jpg",
+                "Zone_Backgrounds/8.jpg",
+                "Zone_Backgrounds/9.jpg",
+                "Zone_Backgrounds/10.jpg",
+                "Zone_Backgrounds/11.jpg",
+                "Zone_Backgrounds/12.jpg",
+                "Zone_Backgrounds/13.jpg",
+                "Zone_Backgrounds/14.jpg"
+            ]
         }
     ]
 }
