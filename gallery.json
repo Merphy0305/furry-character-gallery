@@ -272,8 +272,8 @@
         },
         {
             "id": "Zone_Backgrounds",
-            "name": "Zone_Backgrounds",
-            "name_en": "",
+            "name": "场景背景",
+            "name_en": "Backgrounds",
             "aliases": [],
             "description": "",
             "tags": [],
