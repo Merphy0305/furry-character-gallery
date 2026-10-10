@@ -27,6 +27,13 @@
 "description": "",
 "tags": []
 },
+"Zone_Backgrounds": {
+"name": "场景背景",
+"name_en": "Backgrounds",
+"aliases": [],
+"description": "",
+"tags": []
+},
 "Kazami_Hayaba": {
 "name": "Kazami_Hayaba",
 "name_en": "",
