@@ -12,6 +12,11 @@
 
 <title>Furry Character Gallery</title>
 
+<meta
+    name="description"
+    content="Merphy's AI-generated furry character gallery. AI生成のケモノキャラクターギャラリー。AI生成兽人角色图库。X: @merphy0305"
+>
+
 <style>
 
 /* =========================================================
@@ -994,6 +999,66 @@ header p {
 
 }
 
+/* =========================================================
+   AI 标识 / X 链接 / 页脚
+   ========================================================= */
+
+.header-badges {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-top: 14px;
+}
+
+.ai-badge,
+.x-link {
+    display: inline-block;
+    padding: 6px 12px;
+    border: 1px solid rgba(255,255,255,0.18);
+    border-radius: 999px;
+    background: rgba(0,0,0,0.45);
+    font-size: 12px;
+    line-height: 1;
+    color: #ddd;
+}
+
+.x-link {
+    text-decoration: none;
+    transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.x-link:hover {
+    background: rgba(255,255,255,0.15);
+    border-color: rgba(255,255,255,0.35);
+    color: #fff;
+}
+
+#site-footer {
+    position: relative;
+    z-index: 1;
+    padding: 10px 20px 40px;
+    text-align: center;
+    color: #888;
+    font-size: 12px;
+    line-height: 1.8;
+}
+
+#site-footer p {
+    margin: 0;
+}
+
+#site-footer a {
+    color: #bbb;
+    text-decoration: none;
+}
+
+#site-footer a:hover {
+    color: #fff;
+    text-decoration: underline;
+}
+
 </style>
 
 </head>
@@ -1017,6 +1082,23 @@ header p {
     <p>
         Merphy's Character Gallery
     </p>
+
+    <div class="header-badges">
+
+        <span class="ai-badge">
+            AI Generated · AI生成 · AI生成イラスト
+        </span>
+
+        <a
+            class="x-link"
+            href="https://x.com/merphy0305"
+            target="_blank"
+            rel="noopener noreferrer"
+        >
+            𝕏 @merphy0305
+        </a>
+
+    </div>
 
 </header>
 
@@ -1074,6 +1156,30 @@ header p {
      ===================================================== -->
 
 <main id="characters"></main>
+
+
+<!-- =====================================================
+     页脚：AI 声明 + X 链接
+     ===================================================== -->
+
+<footer id="site-footer">
+
+    <p>
+        本站所有图片均为 AI 生成 ·
+        All images are AI-generated ·
+        掲載画像はすべてAI生成です
+    </p>
+
+    <p>
+        作者 Author / 作者：墨扉 (merphy) ·
+        <a
+            href="https://x.com/merphy0305"
+            target="_blank"
+            rel="noopener noreferrer"
+        >𝕏 @merphy0305</a>
+    </p>
+
+</footer>
 
 
 <!-- =====================================================
