@@ -339,7 +339,7 @@ header p {
 
 
 /* =========================================================
-   角色列表
+   图鉴网格
    ========================================================= */
 
 #characters {
@@ -352,62 +352,288 @@ header p {
     padding:
         20px
         30px
-        60px;
+        40px;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            auto-fill,
+            minmax(190px, 1fr)
+        );
+
+    gap: 18px;
 }
 
-.character {
-    margin-bottom: 50px;
+.dex-card {
+    position: relative;
 
-    transition:
-        opacity 0.3s ease,
-        transform 0.3s ease,
-        max-height 0.35s ease,
-        margin 0.35s ease;
+    display: flex;
 
-    max-height: 1400px;
-}
+    flex-direction: column;
 
-.character.filtered-out {
-    opacity: 0;
+    min-width: 0;
 
-    transform:
-        scale(0.96);
+    padding: 0;
 
-    max-height: 0;
+    border:
+        1px solid
+        rgba(255,255,255,0.10);
+
+    border-radius: 12px;
+
+    background:
+        rgba(20,20,20,0.82);
+
+    color: inherit;
+
+    font: inherit;
+
+    text-align: left;
+
+    cursor: pointer;
 
     overflow: hidden;
 
-    margin-bottom: 0;
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        border-color 0.2s ease;
+}
+
+.dex-card:hover,
+.dex-card:focus-visible {
+    transform:
+        translateY(-5px);
+
+    border-color:
+        rgba(255,255,255,0.32);
+
+    box-shadow:
+        0
+        12px
+        30px
+        rgba(0,0,0,0.55);
+
+    outline: none;
+}
+
+.dex-card.filtered-out {
+    display: none;
+}
+
+.dex-cover {
+    position: relative;
+
+    aspect-ratio: 2 / 3;
+
+    background: #181818;
+
+    overflow: hidden;
+}
+
+.dex-cover img {
+    display: block;
+
+    width: 100%;
+
+    height: 100%;
+
+    object-fit: cover;
+
+    object-position:
+        center
+        20%;
+
+    transition:
+        transform 0.4s ease;
+}
+
+.dex-card:hover .dex-cover img,
+.dex-card:focus-visible .dex-cover img {
+    transform: scale(1.04);
+}
+
+.dex-count {
+    position: absolute;
+
+    top: 8px;
+
+    right: 8px;
+
+    padding:
+        4px
+        9px;
+
+    border-radius: 999px;
+
+    background:
+        rgba(0,0,0,0.65);
+
+    color: #ddd;
+
+    font-size: 12px;
+
+    line-height: 1;
 
     pointer-events: none;
 }
 
+.dex-info {
+    padding:
+        10px
+        12px
+        12px;
+}
 
-/* =========================================================
-   角色标题
-   ========================================================= */
+.dex-name {
+    font-size: 15px;
 
-.character-title {
+    font-weight: 600;
+
+    line-height: 1.35;
+
+    word-break: break-word;
+}
+
+.dex-name-en {
+    margin-top: 2px;
+
+    color: #999;
+
+    font-size: 12px;
+
+    line-height: 1.4;
+
+    word-break: break-word;
+}
+
+.dex-tags {
     display: flex;
 
-    align-items: center;
+    flex-wrap: wrap;
+
+    gap: 5px;
+
+    margin-top: 8px;
+}
+
+.dex-tags span {
+    padding:
+        3px
+        7px;
+
+    border-radius: 999px;
+
+    background:
+        rgba(255,255,255,0.08);
+
+    color: #aaa;
+
+    font-size: 11px;
+
+    line-height: 1.2;
+}
+
+
+/* =========================================================
+   角色详情层
+   ========================================================= */
+
+#detail {
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 5000;
+
+    display: none;
+
+    background: #0c0c0c;
+
+    overflow-y: auto;
+
+    overscroll-behavior: contain;
+}
+
+#detail.active {
+    display: block;
+}
+
+#detail-panel {
+    max-width: 1400px;
+
+    margin: 0 auto;
+
+    padding:
+        16px
+        30px
+        60px;
+}
+
+#detail-back {
+    position: sticky;
+
+    top: 12px;
+
+    z-index: 2;
+
+    display: inline-block;
+
+    padding:
+        9px
+        16px;
+
+    border:
+        1px solid
+        rgba(255,255,255,0.18);
+
+    border-radius: 999px;
+
+    background:
+        rgba(0,0,0,0.65);
+
+    color: #eee;
+
+    font-size: 14px;
+
+    line-height: 1;
+
+    cursor: pointer;
+
+    -webkit-backdrop-filter:
+        blur(6px);
+
+    backdrop-filter:
+        blur(6px);
+}
+
+#detail-back:hover {
+    background:
+        rgba(255,255,255,0.15);
+}
+
+.detail-head {
+    display: flex;
+
+    align-items: baseline;
 
     justify-content: space-between;
 
     gap: 15px;
 
-    margin-bottom: 8px;
+    margin-top: 20px;
 }
 
-.character-title h2 {
+.detail-head h2 {
     margin: 0;
 
-    font-size: 24px;
+    font-size: 28px;
 
     line-height: 1.3;
 }
 
-.character-count {
+.detail-count {
     flex-shrink: 0;
 
     color: #888;
@@ -415,40 +641,37 @@ header p {
     font-size: 13px;
 }
 
+.detail-sub {
+    margin-top: 4px;
 
-/* =========================================================
-   角色简介
-   ========================================================= */
-
-.character-description {
-    margin:
-        0
-        0
-        10px;
-
-    color: #aaa;
+    color: #999;
 
     font-size: 14px;
 
-    line-height: 1.6;
+    word-break: break-word;
 }
 
+.detail-description {
+    margin: 12px 0 0;
 
-/* =========================================================
-   角色 Tags
-   ========================================================= */
+    color: #bbb;
 
-.character-tags {
+    font-size: 14px;
+
+    line-height: 1.7;
+}
+
+.detail-tags {
     display: flex;
 
     flex-wrap: wrap;
 
     gap: 7px;
 
-    margin-bottom: 15px;
+    margin-top: 14px;
 }
 
-.character-tag {
+.detail-tag {
     padding:
         5px
         10px;
@@ -473,11 +696,10 @@ header p {
     transition:
         background 0.2s ease,
         color 0.2s ease,
-        border-color 0.2s ease,
-        transform 0.2s ease;
+        border-color 0.2s ease;
 }
 
-.character-tag:hover {
+.detail-tag:hover {
     background:
         rgba(255,255,255,0.15);
 
@@ -485,130 +707,80 @@ header p {
         rgba(255,255,255,0.25);
 
     color: white;
-
-    transform:
-        translateY(-1px);
 }
 
+.detail-grid {
+    display: grid;
 
-/* =========================================================
-   横向画廊
-   ========================================================= */
+    grid-template-columns:
+        repeat(
+            auto-fill,
+            minmax(200px, 1fr)
+        );
 
-.gallery-wrapper {
+    grid-auto-flow: dense;
+
+    gap: 14px;
+
+    margin-top: 22px;
+}
+
+.detail-item {
     position: relative;
 
-    width: 100%;
-}
+    min-width: 0;
 
-.gallery {
-    display: flex;
+    aspect-ratio: 2 / 3;
 
-    gap: 16px;
+    padding: 0;
 
-    overflow-x: auto;
-
-    overflow-y: hidden;
-
-    padding:
-        5px
-        2px
-        15px;
-
-    scroll-behavior: smooth;
-
-    scrollbar-width: thin;
-
-    scrollbar-color:
-        #555
-        #222;
-
-    cursor: grab;
-
-    /*
-     * 保持触摸设备上的横向滑动，
-     * 同时允许正常的页面上下滚动。
-     */
-    touch-action: pan-x pan-y;
-}
-
-.gallery:active {
-    cursor: grabbing;
-}
-
-.gallery::-webkit-scrollbar {
-    height: 8px;
-}
-
-.gallery::-webkit-scrollbar-track {
-    background: #222;
-
-    border-radius: 10px;
-}
-
-.gallery::-webkit-scrollbar-thumb {
-    background: #555;
-
-    border-radius: 10px;
-}
-
-.gallery::-webkit-scrollbar-thumb:hover {
-    background: #777;
-}
-
-
-/* =========================================================
-   图片卡片
-   ========================================================= */
-
-.image-card {
-    flex:
-        0
-        0
-        auto;
-
-    width: 260px;
-
-    height: 260px;
-
-    background: #1c1c1c;
+    border: none;
 
     border-radius: 12px;
 
-    overflow: hidden;
+    background: #181818;
 
-    position: relative;
+    overflow: hidden;
 
     cursor: pointer;
 
     transition:
         transform 0.25s ease,
-        box-shadow 0.25s ease,
-        opacity 0.25s ease;
+        box-shadow 0.25s ease;
 }
 
-.image-card:hover {
+.detail-item.wide {
+    grid-column: span 2;
+
+    aspect-ratio: 4 / 3;
+}
+
+.detail-item:hover,
+.detail-item:focus-visible {
     transform:
-        translateY(-6px)
-        scale(1.035);
+        translateY(-4px);
 
     box-shadow:
         0
         12px
         30px
         rgba(0,0,0,0.55);
+
+    outline: none;
 }
 
-.image-card img {
+.detail-item img {
+    display: block;
+
     width: 100%;
 
     height: 100%;
 
-    display: block;
+    object-fit: cover;
 
-    object-fit: contain;
-
-    background: #181818;
+    object-position:
+        center
+        20%;
 }
 
 .image-number {
@@ -632,70 +804,6 @@ header p {
     color: #ddd;
 
     pointer-events: none;
-}
-
-
-/* =========================================================
-   搜索隐藏图片
-   ========================================================= */
-
-.image-card.search-hidden {
-    display: none;
-}
-
-
-/* =========================================================
-   左右滚动按钮
-   ========================================================= */
-
-.scroll-button {
-    position: absolute;
-
-    top: 50%;
-
-    transform:
-        translateY(-50%);
-
-    width: 42px;
-
-    height: 42px;
-
-    border: none;
-
-    border-radius: 50%;
-
-    background:
-        rgba(0,0,0,0.75);
-
-    color: white;
-
-    font-size: 24px;
-
-    cursor: pointer;
-
-    z-index: 5;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    transition:
-        background 0.2s ease;
-}
-
-.scroll-button:hover {
-    background:
-        rgba(255,255,255,0.2);
-}
-
-.scroll-left {
-    left: 10px;
-}
-
-.scroll-right {
-    right: 10px;
 }
 
 
@@ -936,37 +1044,47 @@ header p {
         padding:
             15px
             15px
+            30px;
+
+        grid-template-columns:
+            repeat(
+                2,
+                minmax(0, 1fr)
+            );
+
+        gap: 12px;
+    }
+
+    .dex-name {
+        font-size: 14px;
+    }
+
+    .dex-info {
+        padding:
+            8px
+            10px
+            10px;
+    }
+
+    #detail-panel {
+        padding:
+            12px
+            15px
             40px;
     }
 
-    .character {
-        margin-bottom: 35px;
+    .detail-head h2 {
+        font-size: 22px;
     }
 
-    .character-title {
-        align-items: flex-start;
-    }
+    .detail-grid {
+        grid-template-columns:
+            repeat(
+                2,
+                minmax(0, 1fr)
+            );
 
-    .character-title h2 {
-        font-size: 20px;
-    }
-
-    .character-count {
-        font-size: 12px;
-    }
-
-    .character-description {
-        font-size: 13px;
-    }
-
-    .image-card {
-        width: 200px;
-
-        height: 200px;
-    }
-
-    .scroll-button {
-        display: none;
+        gap: 10px;
     }
 
     #lightbox {
@@ -1123,7 +1241,7 @@ header p {
     </div>
 
     <div id="search-info">
-        支持中文、英文、昵称、标签和精确图片编号；点击标签可加入筛选
+        支持中文、英文、昵称、标签和图片编号；点击角色可查看全部图片
     </div>
 
 </div>
@@ -1183,6 +1301,28 @@ header p {
 
 
 <!-- =====================================================
+     角色详情层
+     ===================================================== -->
+
+<div id="detail" aria-hidden="true">
+
+    <div id="detail-panel">
+
+        <button
+            id="detail-back"
+            type="button"
+        >
+            ← 返回图鉴
+        </button>
+
+        <div id="detail-content"></div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
      Lightbox
      ===================================================== -->
 
@@ -1229,7 +1369,12 @@ header p {
    全局状态
    ========================================================= */
 
+const DEFAULT_SEARCH_INFO =
+    "支持中文、英文、昵称、标签和图片编号；点击角色可查看全部图片";
+
 let galleryData = [];
+
+const characterById = new Map();
 
 let currentImages = [];
 
@@ -1239,6 +1384,13 @@ let currentCharacterName = "";
 
 let selectedTags = [];
 
+/*
+ * 详情层是不是由页面内点击打开的（会往浏览器历史里
+ * 压一条记录）。直接打开 #角色ID 分享链接时为 false。
+ */
+
+let detailOpenedByPush = false;
+
 
 /* =========================================================
    读取 gallery.json
@@ -1247,19 +1399,13 @@ let selectedTags = [];
 async function loadGallery() {
 
     const loading =
-        document.getElementById(
-            "loading"
-        );
+        document.getElementById("loading");
 
     const container =
-        document.getElementById(
-            "characters"
-        );
+        document.getElementById("characters");
 
     const error =
-        document.getElementById(
-            "error"
-        );
+        document.getElementById("error");
 
     try {
 
@@ -1279,46 +1425,96 @@ async function loadGallery() {
         const data =
             await response.json();
 
-        galleryData =
-            Array.isArray(data.characters)
-                ? data.characters
-                : [];
+        /*
+         * 没有图片的角色没有封面，不显示。
+         */
 
+        galleryData =
+            (
+                Array.isArray(data.characters)
+                    ? data.characters
+                    : []
+            ).filter(
+                character =>
+                    Array.isArray(character.images) &&
+                    character.images.length > 0
+            );
 
         galleryData.forEach(
             character => {
 
-                const section =
-                    createCharacterGallery(
+                /*
+                 * 图片按编号自然排序（1, 2, 10 而不是 1, 10, 2），
+                 * 排在最前面的图片就是封面。
+                 */
+
+                character.images =
+                    [...character.images].sort(
+                        compareImagePaths
+                    );
+
+                character._searchText =
+                    getCharacterSearchText(
                         character
                     );
 
-                container.appendChild(
-                    section
+                character._numbers =
+                    new Set(
+                        character.images
+                            .map(
+                                path =>
+                                    getImageNumber(
+                                        getFilename(path)
+                                            .toLocaleLowerCase()
+                                    )
+                            )
+                            .filter(Boolean)
+                    );
+
+                characterById.set(
+                    String(character.id),
+                    character
                 );
 
             }
         );
 
+        const fragment =
+            document.createDocumentFragment();
+
+        galleryData.forEach(
+            character => {
+
+                fragment.appendChild(
+                    createCharacterCard(
+                        character
+                    )
+                );
+
+            }
+        );
+
+        container.appendChild(fragment);
 
         updateStatistics();
-
 
         loading.style.display =
             "none";
 
-
         document
-            .getElementById(
-                "search-box"
-            )
+            .getElementById("search-box")
             .addEventListener(
                 "input",
                 performSearch
             );
 
-
         renderSelectedTags();
+
+        /*
+         * 如果链接带有 #角色ID，直接打开该角色。
+         */
+
+        syncFromHash();
 
     } catch (err) {
 
@@ -1348,101 +1544,280 @@ async function loadGallery() {
 
 
 /* =========================================================
-   创建角色画廊
+   图鉴封面卡片
    ========================================================= */
 
-function createCharacterGallery(
+function createCharacterCard(
     character
 ) {
 
-    const section =
-        document.createElement(
-            "section"
-        );
+    const displayName =
+        getPrimaryName(character);
 
-    section.className =
-        "character";
+    const secondaryName =
+        getSecondaryName(character);
+
+    const card =
+        document.createElement("button");
+
+    card.type =
+        "button";
+
+    card.className =
+        "dex-card";
+
+    card.dataset.characterId =
+        String(character.id);
+
+    card.setAttribute(
+        "aria-label",
+        `${formatCharacterName(character)}，${character.images.length} 张图片`
+    );
 
 
     /*
-     * =====================================================
-     * 标题
-     * =====================================================
+     * 封面
      */
 
-    const title =
-        document.createElement(
-            "div"
-        );
+    const cover =
+        document.createElement("div");
 
-    title.className =
-        "character-title";
+    cover.className =
+        "dex-cover";
 
+    const img =
+        document.createElement("img");
 
-    const heading =
-        document.createElement(
-            "h2"
-        );
+    img.src =
+        character.images[0];
 
-    heading.textContent =
+    img.alt =
         formatCharacterName(character);
 
+    img.loading =
+        "lazy";
 
-    const count =
-        document.createElement(
-            "span"
+    img.decoding =
+        "async";
+
+    cover.appendChild(img);
+
+    if (character.images.length > 1) {
+
+        const badge =
+            document.createElement("span");
+
+        badge.className =
+            "dex-count";
+
+        badge.textContent =
+            `${character.images.length} 张`;
+
+        cover.appendChild(badge);
+
+    }
+
+    card.appendChild(cover);
+
+
+    /*
+     * 名称与标签
+     */
+
+    const info =
+        document.createElement("div");
+
+    info.className =
+        "dex-info";
+
+    const name =
+        document.createElement("div");
+
+    name.className =
+        "dex-name";
+
+    name.textContent =
+        displayName;
+
+    info.appendChild(name);
+
+    if (secondaryName) {
+
+        const nameEn =
+            document.createElement("div");
+
+        nameEn.className =
+            "dex-name-en";
+
+        nameEn.textContent =
+            secondaryName;
+
+        info.appendChild(nameEn);
+
+    }
+
+    const tags =
+        Array.isArray(character.tags)
+            ? character.tags.slice(0, 3)
+            : [];
+
+    if (tags.length > 0) {
+
+        const tagRow =
+            document.createElement("div");
+
+        tagRow.className =
+            "dex-tags";
+
+        tags.forEach(
+            tag => {
+
+                const span =
+                    document.createElement("span");
+
+                span.textContent =
+                    `#${tag}`;
+
+                tagRow.appendChild(span);
+
+            }
         );
 
+        info.appendChild(tagRow);
+
+    }
+
+    card.appendChild(info);
+
+
+    card.addEventListener(
+        "click",
+        () => {
+
+            openDetail(
+                character.id
+            );
+
+        }
+    );
+
+    return card;
+
+}
+
+
+/* =========================================================
+   角色详情层
+   ========================================================= */
+
+function renderDetail(
+    character
+) {
+
+    const content =
+        document.getElementById(
+            "detail-content"
+        );
+
+    content.innerHTML = "";
+
+
+    /*
+     * 标题 + 张数
+     */
+
+    const head =
+        document.createElement("div");
+
+    head.className =
+        "detail-head";
+
+    const heading =
+        document.createElement("h2");
+
+    heading.textContent =
+        getPrimaryName(character);
+
+    const count =
+        document.createElement("span");
+
     count.className =
-        "character-count";
+        "detail-count";
 
     count.textContent =
         `${character.images.length} 张图片`;
 
+    head.appendChild(heading);
 
-    title.appendChild(
-        heading
-    );
+    head.appendChild(count);
 
-    title.appendChild(
-        count
-    );
-
-    section.appendChild(
-        title
-    );
+    content.appendChild(head);
 
 
     /*
-     * =====================================================
-     * 角色简介
-     * =====================================================
+     * 英文名、昵称
      */
 
-    if (character.description) {
+    const subParts = [];
 
-        const description =
-            document.createElement(
-                "div"
-            );
+    const secondaryName =
+        getSecondaryName(character);
 
-        description.className =
-            "character-description";
+    if (secondaryName) {
 
-        description.textContent =
-            character.description;
+        subParts.push(secondaryName);
 
-        section.appendChild(
-            description
+    }
+
+    if (
+        Array.isArray(character.aliases) &&
+        character.aliases.length > 0
+    ) {
+
+        subParts.push(
+            `昵称：${character.aliases.join("、")}`
         );
+
+    }
+
+    if (subParts.length > 0) {
+
+        const sub =
+            document.createElement("div");
+
+        sub.className =
+            "detail-sub";
+
+        sub.textContent =
+            subParts.join(" · ");
+
+        content.appendChild(sub);
 
     }
 
 
     /*
-     * =====================================================
-     * Tags
-     * =====================================================
+     * 简介
+     */
+
+    if (character.description) {
+
+        const description =
+            document.createElement("p");
+
+        description.className =
+            "detail-description";
+
+        description.textContent =
+            character.description;
+
+        content.appendChild(description);
+
+    }
+
+
+    /*
+     * 标签：点击后关闭详情，回到图鉴并按标签筛选
      */
 
     if (
@@ -1450,92 +1825,69 @@ function createCharacterGallery(
         character.tags.length > 0
     ) {
 
-        const tagContainer =
-            document.createElement(
-                "div"
-            );
+        const tagRow =
+            document.createElement("div");
 
-        tagContainer.className =
-            "character-tags";
-
+        tagRow.className =
+            "detail-tags";
 
         character.tags.forEach(
             tag => {
 
-                const tagButton =
-                    document.createElement(
-                        "button"
-                    );
+                const button =
+                    document.createElement("button");
 
-                tagButton.type =
+                button.type =
                     "button";
 
-                tagButton.className =
-                    "character-tag";
+                button.className =
+                    "detail-tag";
 
-                tagButton.textContent =
+                button.textContent =
                     `#${tag}`;
 
-                tagButton.title =
-                    `搜索标签：${tag}`;
+                button.title =
+                    `筛选标签：${tag}`;
 
-
-                tagButton.addEventListener(
+                button.addEventListener(
                     "click",
                     () => {
+
+                        closeDetail();
 
                         addTagFilter(
                             String(tag)
                         );
 
+                        window.scrollTo({
+                            top: 0
+                        });
+
                     }
                 );
 
-
-                tagContainer.appendChild(
-                    tagButton
-                );
+                tagRow.appendChild(button);
 
             }
         );
 
-
-        section.appendChild(
-            tagContainer
-        );
+        content.appendChild(tagRow);
 
     }
 
 
     /*
-     * =====================================================
-     * 画廊容器
-     * =====================================================
+     * 全部图片
      */
 
-    const wrapper =
-        document.createElement(
-            "div"
-        );
+    const grid =
+        document.createElement("div");
 
-    wrapper.className =
-        "gallery-wrapper";
+    grid.className =
+        "detail-grid";
 
-
-    const gallery =
-        document.createElement(
-            "div"
-        );
-
-    gallery.className =
-        "gallery";
-
-
-    /*
-     * =====================================================
-     * 图片
-     * =====================================================
-     */
+    const characterName =
+        formatCharacterName(character);
 
     character.images.forEach(
         (
@@ -1543,207 +1895,269 @@ function createCharacterGallery(
             index
         ) => {
 
-            const card =
-                document.createElement(
-                    "div"
-                );
+            const item =
+                document.createElement("button");
 
-            card.className =
-                "image-card";
+            item.type =
+                "button";
 
+            item.className =
+                "detail-item";
 
-            card.dataset.characterId =
-                character.id || "";
-
-
-            card.dataset.filename =
-                getFilename(
-                    imagePath
-                );
-
-
-            /*
-             * 图片
-             */
+            item.setAttribute(
+                "aria-label",
+                `${characterName} ${getFilename(imagePath)}`
+            );
 
             const img =
-                document.createElement(
-                    "img"
-                );
+                document.createElement("img");
 
             img.src =
                 imagePath;
 
             img.alt =
-                `${formatCharacterName(character)} ${getFilename(imagePath)}`;
+                `${characterName} ${getFilename(imagePath)}`;
 
             img.loading =
                 "lazy";
 
+            img.decoding =
+                "async";
 
             /*
-             * 图片编号
+             * 横图占两列，竖图占一列。
              */
 
+            img.addEventListener(
+                "load",
+                () => {
+
+                    if (
+                        img.naturalWidth >
+                        img.naturalHeight
+                    ) {
+
+                        item.classList.add("wide");
+
+                    }
+
+                }
+            );
+
             const number =
-                document.createElement(
-                    "div"
-                );
+                document.createElement("div");
 
             number.className =
                 "image-number";
 
             number.textContent =
-                getFilename(
-                    imagePath
-                );
+                getFilename(imagePath);
 
+            item.appendChild(img);
 
-            /*
-             * 添加元素
-             */
+            item.appendChild(number);
 
-            card.appendChild(
-                img
-            );
-
-            card.appendChild(
-                number
-            );
-
-
-            /*
-             * 点击打开 Lightbox
-             */
-
-            card.addEventListener(
+            item.addEventListener(
                 "click",
                 () => {
 
                     openLightbox(
                         character.images,
                         index,
-                        formatCharacterName(character)
+                        characterName
                     );
 
                 }
             );
 
-
-            gallery.appendChild(
-                card
-            );
+            grid.appendChild(item);
 
         }
     );
 
-
-    /*
-     * =====================================================
-     * 左按钮
-     * =====================================================
-     */
-
-    const leftButton =
-        document.createElement(
-            "button"
-        );
-
-    leftButton.type =
-        "button";
-
-    leftButton.className =
-        "scroll-button scroll-left";
-
-    leftButton.textContent =
-        "‹";
-
-    leftButton.setAttribute(
-        "aria-label",
-        "向左滚动"
-    );
-
-
-    leftButton.onclick =
-        () => {
-
-            gallery.scrollBy({
-
-                left: -700,
-
-                behavior: "smooth"
-
-            });
-
-        };
-
-
-    /*
-     * =====================================================
-     * 右按钮
-     * =====================================================
-     */
-
-    const rightButton =
-        document.createElement(
-            "button"
-        );
-
-    rightButton.type =
-        "button";
-
-    rightButton.className =
-        "scroll-button scroll-right";
-
-    rightButton.textContent =
-        "›";
-
-    rightButton.setAttribute(
-        "aria-label",
-        "向右滚动"
-    );
-
-
-    rightButton.onclick =
-        () => {
-
-            gallery.scrollBy({
-
-                left: 700,
-
-                behavior: "smooth"
-
-            });
-
-        };
-
-
-    /*
-     * =====================================================
-     * 组合
-     * =====================================================
-     */
-
-    wrapper.appendChild(
-        leftButton
-    );
-
-    wrapper.appendChild(
-        gallery
-    );
-
-    wrapper.appendChild(
-        rightButton
-    );
-
-    section.appendChild(
-        wrapper
-    );
-
-
-    return section;
+    content.appendChild(grid);
 
 }
+
+
+/*
+ * 由卡片点击触发：往历史里压入 #角色ID，
+ * 随后 hashchange 会真正显示详情层。
+ */
+
+function openDetail(
+    id
+) {
+
+    detailOpenedByPush = true;
+
+    location.hash =
+        encodeURIComponent(
+            String(id)
+        );
+
+}
+
+
+/*
+ * 由“返回图鉴”按钮、Esc、标签点击触发。
+ */
+
+function closeDetail() {
+
+    if (
+        !document
+            .getElementById("detail")
+            .classList
+            .contains("active")
+    ) {
+
+        return;
+
+    }
+
+    if (detailOpenedByPush) {
+
+        /*
+         * 回退一步，hashchange 会隐藏详情层。
+         */
+
+        detailOpenedByPush = false;
+
+        history.back();
+
+    } else {
+
+        /*
+         * 直接通过分享链接进入的：不要把用户退出本站。
+         */
+
+        history.replaceState(
+            null,
+            "",
+            location.pathname + location.search
+        );
+
+        hideDetail();
+
+    }
+
+}
+
+
+function showDetail(
+    character
+) {
+
+    const detail =
+        document.getElementById("detail");
+
+    renderDetail(character);
+
+    detail.classList.add("active");
+
+    detail.setAttribute(
+        "aria-hidden",
+        "false"
+    );
+
+    detail.scrollTop = 0;
+
+    document.body.style.overflow =
+        "hidden";
+
+    document.title =
+        `${getPrimaryName(character)} · Furry Character Gallery`;
+
+}
+
+
+function hideDetail() {
+
+    const detail =
+        document.getElementById("detail");
+
+    detail.classList.remove("active");
+
+    detail.setAttribute(
+        "aria-hidden",
+        "true"
+    );
+
+    document.getElementById(
+        "detail-content"
+    ).innerHTML = "";
+
+    document.title =
+        "Furry Character Gallery";
+
+    if (
+        !document
+            .getElementById("lightbox")
+            .classList
+            .contains("active")
+    ) {
+
+        document.body.style.overflow =
+            "";
+
+    }
+
+}
+
+
+/*
+ * 根据地址栏里的 #角色ID 显示或隐藏详情层。
+ */
+
+function syncFromHash() {
+
+    let id = "";
+
+    try {
+
+        id =
+            decodeURIComponent(
+                location.hash.slice(1)
+            );
+
+    } catch (e) {
+
+        id = "";
+
+    }
+
+    const character =
+        id
+            ? characterById.get(id)
+            : null;
+
+    if (character) {
+
+        showDetail(character);
+
+    } else {
+
+        detailOpenedByPush = false;
+
+        hideDetail();
+
+    }
+
+}
+
+
+window.addEventListener(
+    "hashchange",
+    syncFromHash
+);
+
+document
+    .getElementById("detail-back")
+    .addEventListener(
+        "click",
+        closeDetail
+    );
 
 
 /* =========================================================
@@ -1761,13 +2175,11 @@ function formatCharacterName(
             ""
         ).trim();
 
-
     const nameEn =
         String(
             character.name_en ||
             ""
         ).trim();
-
 
     if (
         name &&
@@ -1780,8 +2192,53 @@ function formatCharacterName(
 
     }
 
-
     return name || nameEn;
+
+}
+
+
+/*
+ * 图鉴里主标题（中文名）和副标题（英文名）分开显示。
+ */
+
+function getPrimaryName(
+    character
+) {
+
+    return String(
+        character.name ||
+        character.name_en ||
+        character.id ||
+        ""
+    ).trim();
+
+}
+
+function getSecondaryName(
+    character
+) {
+
+    const primary =
+        getPrimaryName(character);
+
+    const nameEn =
+        String(
+            character.name_en || ""
+        )
+            .replace(/_/g, " ")
+            .trim();
+
+    if (
+        !nameEn ||
+        nameEn.toLowerCase() ===
+        primary.toLowerCase()
+    ) {
+
+        return "";
+
+    }
+
+    return nameEn;
 
 }
 
@@ -1801,6 +2258,27 @@ function getFilename(
 }
 
 
+/*
+ * 按文件名自然排序（1, 2, 10）。
+ */
+
+function compareImagePaths(
+    a,
+    b
+) {
+
+    return getFilename(a).localeCompare(
+        getFilename(b),
+        undefined,
+        {
+            numeric: true,
+            sensitivity: "base"
+        }
+    );
+
+}
+
+
 /* =========================================================
    获取图片编号
    ========================================================= */
@@ -1814,13 +2292,11 @@ function getImageNumber(
             /^(\d+)(?:\.[^.]+)?$/i
         );
 
-
     if (!match) {
 
         return null;
 
     }
-
 
     return match[1];
 
@@ -1868,7 +2344,6 @@ function getCharacterSearchText(
 
     ];
 
-
     return fields
         .map(normalizeText)
         .filter(Boolean)
@@ -1888,13 +2363,11 @@ function addTagFilter(
     const normalized =
         normalizeText(tag);
 
-
     if (!normalized) {
 
         return;
 
     }
-
 
     const exists =
         selectedTags.some(
@@ -1903,15 +2376,11 @@ function addTagFilter(
                 normalized
         );
 
-
     if (!exists) {
 
-        selectedTags.push(
-            tag
-        );
+        selectedTags.push(tag);
 
     }
-
 
     renderSelectedTags();
 
@@ -1937,12 +2406,10 @@ function removeTagFilter(
 
     }
 
-
     selectedTags.splice(
         index,
         1
     );
-
 
     renderSelectedTags();
 
@@ -1962,9 +2429,7 @@ function renderSelectedTags() {
             "selected-tags"
         );
 
-
     container.innerHTML = "";
-
 
     selectedTags.forEach(
         (
@@ -1973,27 +2438,19 @@ function renderSelectedTags() {
         ) => {
 
             const chip =
-                document.createElement(
-                    "span"
-                );
+                document.createElement("span");
 
             chip.className =
                 "search-tag";
 
-
             const text =
-                document.createElement(
-                    "span"
-                );
+                document.createElement("span");
 
             text.textContent =
                 tag;
 
-
             const close =
-                document.createElement(
-                    "button"
-                );
+                document.createElement("button");
 
             close.type =
                 "button";
@@ -2004,37 +2461,25 @@ function renderSelectedTags() {
             close.textContent =
                 "×";
 
-
             close.setAttribute(
                 "aria-label",
                 `删除标签 ${tag}`
             );
 
-
             close.addEventListener(
                 "click",
                 () => {
 
-                    removeTagFilter(
-                        index
-                    );
+                    removeTagFilter(index);
 
                 }
             );
 
+            chip.appendChild(text);
 
-            chip.appendChild(
-                text
-            );
+            chip.appendChild(close);
 
-            chip.appendChild(
-                close
-            );
-
-
-            container.appendChild(
-                chip
-            );
+            container.appendChild(chip);
 
         }
     );
@@ -2048,33 +2493,26 @@ function renderSelectedTags() {
 
 function performSearch() {
 
-    const searchBox =
-        document.getElementById(
-            "search-box"
-        );
-
-
     const input =
-        searchBox.value.trim();
+        document
+            .getElementById("search-box")
+            .value
+            .trim();
 
-
-    const sections =
+    const cards =
         document.querySelectorAll(
-            ".character"
+            ".dex-card"
         );
-
 
     const noResults =
         document.getElementById(
             "no-results"
         );
 
-
     const searchInfo =
         document.getElementById(
             "search-info"
         );
-
 
     /*
      * 自由文字搜索条件
@@ -2086,9 +2524,8 @@ function performSearch() {
             .split(/\s+/)
             .filter(Boolean);
 
-
     /*
-     * 没有任何搜索条件
+     * 没有任何搜索条件：显示全部
      */
 
     if (
@@ -2096,75 +2533,35 @@ function performSearch() {
         selectedTags.length === 0
     ) {
 
-        sections.forEach(
-            section => {
+        cards.forEach(
+            card => {
 
-                section.classList.remove(
+                card.classList.remove(
                     "filtered-out"
-                );
-
-
-                const cards =
-                    section.querySelectorAll(
-                        ".image-card"
-                    );
-
-
-                cards.forEach(
-                    card => {
-
-                        card.classList.remove(
-                            "search-hidden"
-                        );
-
-                    }
                 );
 
             }
         );
 
-
         searchInfo.textContent =
-            "支持中文、英文、昵称、标签和精确图片编号；点击标签可加入筛选";
-
+            DEFAULT_SEARCH_INFO;
 
         noResults.style.display =
             "none";
-
 
         return;
 
     }
 
-
-    let visibleImages = 0;
-
     let visibleCharacters = 0;
 
-
-    /*
-     * 遍历角色
-     */
-
-    sections.forEach(
-        section => {
-
-            const characterId =
-                section
-                    .querySelector(
-                        ".image-card"
-                    )
-                    ?.dataset
-                    .characterId;
-
+    cards.forEach(
+        card => {
 
             const character =
-                galleryData.find(
-                    item =>
-                        String(item.id) ===
-                        String(characterId)
+                characterById.get(
+                    card.dataset.characterId
                 );
-
 
             if (!character) {
 
@@ -2172,165 +2569,65 @@ function performSearch() {
 
             }
 
-
             /*
-             * 角色搜索文本
-             */
-
-            const searchText =
-                getCharacterSearchText(
-                    character
-                );
-
-
-            /*
-             * Tag 条件
+             * Tag 条件：每个已选标签都必须命中
              */
 
             const characterTags =
-                Array.isArray(character.tags)
-                    ? character.tags
-                    : [];
-
-
-            const normalizedCharacterTags =
-                characterTags.map(
-                    normalizeText
-                );
-
+                (
+                    Array.isArray(character.tags)
+                        ? character.tags
+                        : []
+                ).map(normalizeText);
 
             const tagsMatched =
                 selectedTags.every(
                     tag =>
-                        normalizedCharacterTags
-                            .includes(
-                                normalizeText(tag)
-                            )
+                        characterTags.includes(
+                            normalizeText(tag)
+                        )
                 );
-
-
-            const cards =
-                section.querySelectorAll(
-                    ".image-card"
-                );
-
-
-            let characterHasMatch =
-                false;
-
 
             /*
-             * 遍历图片
+             * 文字条件：每个词都必须命中
+             *
+             * 纯数字：该角色有这个编号的图片
+             * 其他：角色名、英文名、昵称、标签
              */
 
-            cards.forEach(
-                card => {
+            const textMatched =
+                textTokens.every(
+                    token => {
 
-                    const filename =
-                        (
-                            card.dataset.filename ||
-                            ""
-                        )
-                        .toLocaleLowerCase();
+                        if (/^\d+$/.test(token)) {
 
+                            return character._numbers.has(
+                                token
+                            );
 
-                    const imageNumber =
-                        getImageNumber(
-                            filename
-                        );
+                        }
 
-
-                    /*
-                     * 每个文字搜索词都必须满足
-                     */
-
-                    const textMatched =
-                        textTokens.every(
-                            token => {
-
-                                /*
-                                 * 数字搜索：
-                                 *
-                                 * 精确匹配图片编号
-                                 */
-
-                                if (
-                                    /^\d+$/.test(
-                                        token
-                                    )
-                                ) {
-
-                                    return (
-                                        imageNumber ===
-                                        token
-                                    );
-
-                                }
-
-
-                                /*
-                                 * 文字搜索：
-                                 *
-                                 * 角色名称、
-                                 * 英文名、
-                                 * aliases、
-                                 * tags
-                                 */
-
-                                return searchText.includes(
-                                    token
-                                );
-
-                            }
-                        );
-
-
-                    const matched =
-                        tagsMatched &&
-                        textMatched;
-
-
-                    if (matched) {
-
-                        card.classList.remove(
-                            "search-hidden"
-                        );
-
-
-                        characterHasMatch =
-                            true;
-
-
-                        visibleImages++;
-
-                    } else {
-
-                        card.classList.add(
-                            "search-hidden"
+                        return character._searchText.includes(
+                            token
                         );
 
                     }
-
-                }
-            );
-
-
-            /*
-             * 更新角色状态
-             */
-
-            if (characterHasMatch) {
-
-                section.classList.remove(
-                    "filtered-out"
                 );
 
+            if (
+                tagsMatched &&
+                textMatched
+            ) {
+
+                card.classList.remove(
+                    "filtered-out"
+                );
 
                 visibleCharacters++;
 
             } else {
 
-                section.classList.add(
+                card.classList.add(
                     "filtered-out"
                 );
 
@@ -2339,32 +2636,13 @@ function performSearch() {
         }
     );
 
-
-    /*
-     * 搜索统计
-     */
-
     searchInfo.textContent =
-        `找到 ${visibleCharacters} 个角色，${visibleImages} 张图片`;
+        `找到 ${visibleCharacters} 个角色`;
 
-
-    /*
-     * 无结果
-     */
-
-    if (
-        visibleImages === 0
-    ) {
-
-        noResults.style.display =
-            "block";
-
-    } else {
-
-        noResults.style.display =
-            "none";
-
-    }
+    noResults.style.display =
+        visibleCharacters === 0
+            ? "block"
+            : "none";
 
 }
 
@@ -2378,34 +2656,17 @@ function updateStatistics() {
     const totalCharacters =
         galleryData.length;
 
-
     const totalImages =
         galleryData.reduce(
             (
                 total,
                 character
-            ) => {
-
-                return (
-                    total +
-                    (
-                        Array.isArray(
-                            character.images
-                        )
-                            ? character.images.length
-                            : 0
-                    )
-                );
-
-            },
+            ) => total + character.images.length,
             0
         );
 
-
     document
-        .getElementById(
-            "statistics"
-        )
+        .getElementById("statistics")
         .textContent =
         `${totalCharacters} 个角色 · ${totalImages} 张图片`;
 
@@ -2421,14 +2682,10 @@ function escapeHtml(
 ) {
 
     const div =
-        document.createElement(
-            "div"
-        );
-
+        document.createElement("div");
 
     div.textContent =
         String(value);
-
 
     return div.innerHTML;
 
@@ -2448,25 +2705,18 @@ function openLightbox(
     currentImages =
         images;
 
-
     currentIndex =
         index;
-
 
     currentCharacterName =
         characterName;
 
-
     updateLightbox();
 
-
     document
-        .getElementById(
-            "lightbox"
-        )
+        .getElementById("lightbox")
         .classList
         .add("active");
-
 
     document.body.style.overflow =
         "hidden";
@@ -2485,33 +2735,38 @@ function updateLightbox() {
 
     }
 
-
     const image =
-        currentImages[
-            currentIndex
-        ];
-
+        currentImages[currentIndex];
 
     const filename =
-        getFilename(
-            image
-        );
-
+        getFilename(image);
 
     document
-        .getElementById(
-            "lightbox-image"
-        )
+        .getElementById("lightbox-image")
         .src =
         image;
 
-
     document
-        .getElementById(
-            "lightbox-info"
-        )
+        .getElementById("lightbox-info")
         .textContent =
         `${currentCharacterName} · ${filename} · ${currentIndex + 1} / ${currentImages.length}`;
+
+    /*
+     * 预读下一张，翻页更流畅。
+     */
+
+    if (currentImages.length > 1) {
+
+        const next =
+            new Image();
+
+        next.src =
+            currentImages[
+                (currentIndex + 1) %
+                currentImages.length
+            ];
+
+    }
 
 }
 
@@ -2519,15 +2774,21 @@ function updateLightbox() {
 function closeLightbox() {
 
     document
-        .getElementById(
-            "lightbox"
-        )
+        .getElementById("lightbox")
         .classList
         .remove("active");
 
+    /*
+     * 详情层还开着时，页面继续保持锁定滚动。
+     */
 
     document.body.style.overflow =
-        "";
+        document
+            .getElementById("detail")
+            .classList
+            .contains("active")
+            ? "hidden"
+            : "";
 
 }
 
@@ -2543,19 +2804,14 @@ function previousImage() {
 
     }
 
-
     currentIndex--;
 
-
-    if (
-        currentIndex < 0
-    ) {
+    if (currentIndex < 0) {
 
         currentIndex =
             currentImages.length - 1;
 
     }
-
 
     updateLightbox();
 
@@ -2573,9 +2829,7 @@ function nextImage() {
 
     }
 
-
     currentIndex++;
-
 
     if (
         currentIndex >=
@@ -2585,7 +2839,6 @@ function nextImage() {
         currentIndex = 0;
 
     }
-
 
     updateLightbox();
 
@@ -2600,49 +2853,47 @@ document.addEventListener(
     "keydown",
     event => {
 
-        const lightbox =
-            document.getElementById(
-                "lightbox"
-            );
+        const lightboxActive =
+            document
+                .getElementById("lightbox")
+                .classList
+                .contains("active");
 
+        /*
+         * 灯箱打开时：左右切图，Esc 先关灯箱
+         */
 
-        if (
-            !lightbox.classList.contains(
-                "active"
-            )
-        ) {
+        if (lightboxActive) {
+
+            if (event.key === "ArrowLeft") {
+
+                previousImage();
+
+            }
+
+            if (event.key === "ArrowRight") {
+
+                nextImage();
+
+            }
+
+            if (event.key === "Escape") {
+
+                closeLightbox();
+
+            }
 
             return;
 
         }
 
+        /*
+         * 灯箱已关、详情层还开着时，Esc 返回图鉴
+         */
 
-        if (
-            event.key ===
-            "ArrowLeft"
-        ) {
+        if (event.key === "Escape") {
 
-            previousImage();
-
-        }
-
-
-        if (
-            event.key ===
-            "ArrowRight"
-        ) {
-
-            nextImage();
-
-        }
-
-
-        if (
-            event.key ===
-            "Escape"
-        ) {
-
-            closeLightbox();
+            closeDetail();
 
         }
 
@@ -2655,9 +2906,7 @@ document.addEventListener(
    ========================================================= */
 
 document
-    .getElementById(
-        "lightbox"
-    )
+    .getElementById("lightbox")
     .addEventListener(
         "click",
         event => {
@@ -2672,6 +2921,83 @@ document
             }
 
         }
+    );
+
+
+/* =========================================================
+   手机：灯箱左右滑动切图
+   ========================================================= */
+
+let touchStartX = null;
+
+let touchStartY = null;
+
+document
+    .getElementById("lightbox")
+    .addEventListener(
+        "touchstart",
+        event => {
+
+            if (event.touches.length === 1) {
+
+                touchStartX =
+                    event.touches[0].clientX;
+
+                touchStartY =
+                    event.touches[0].clientY;
+
+            } else {
+
+                touchStartX = null;
+
+            }
+
+        },
+        { passive: true }
+    );
+
+document
+    .getElementById("lightbox")
+    .addEventListener(
+        "touchend",
+        event => {
+
+            if (touchStartX === null) {
+
+                return;
+
+            }
+
+            const touch =
+                event.changedTouches[0];
+
+            const dx =
+                touch.clientX - touchStartX;
+
+            const dy =
+                touch.clientY - touchStartY;
+
+            touchStartX = null;
+
+            if (
+                Math.abs(dx) > 50 &&
+                Math.abs(dx) > Math.abs(dy) * 1.5
+            ) {
+
+                if (dx < 0) {
+
+                    nextImage();
+
+                } else {
+
+                    previousImage();
+
+                }
+
+            }
+
+        },
+        { passive: true }
     );
 
 
