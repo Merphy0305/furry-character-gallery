@@ -362,6 +362,12 @@ header p {
             minmax(190px, 1fr)
         );
 
+    /*
+     * 横图占两列时，用后面的竖图填补空位。
+     */
+
+    grid-auto-flow: dense;
+
     gap: 18px;
 }
 
@@ -430,6 +436,19 @@ header p {
     background: #181818;
 
     overflow: hidden;
+}
+
+/*
+ * 横图封面：占两列，并用横向比例显示，
+ * 和详情页里的横图一致。
+ */
+
+.dex-card.wide {
+    grid-column: span 2;
+}
+
+.dex-card.wide .dex-cover {
+    aspect-ratio: 4 / 3;
 }
 
 .dex-cover img {
@@ -1599,6 +1618,35 @@ function createCharacterCard(
 
     img.decoding =
         "async";
+
+    /*
+     * 封面加载后判断横竖：横图占两列。
+     */
+
+    const markWide =
+        () => {
+
+            if (
+                img.naturalWidth >
+                img.naturalHeight
+            ) {
+
+                card.classList.add("wide");
+
+            }
+
+        };
+
+    img.addEventListener(
+        "load",
+        markWide
+    );
+
+    if (img.complete) {
+
+        markWide();
+
+    }
 
     cover.appendChild(img);
 
