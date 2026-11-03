@@ -1,0 +1,3062 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<title>Furry Character Gallery</title>
+
+<meta
+    name="description"
+    content="Merphy's AI-generated furry character gallery. AI生成のケモノキャラクターギャラリー。AI生成兽人角色图库。X: @merphy0305"
+>
+
+<style>
+
+/* =========================================================
+   基础
+   ========================================================= */
+
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+
+    width: 100%;
+    min-height: 100%;
+
+    background: #111;
+
+    color: #fff;
+
+    font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        "Microsoft YaHei",
+        sans-serif;
+
+    /*
+     * 防止移动浏览器上下滑动时产生
+     * overscroll / 橡皮筋效果。
+     */
+    overscroll-behavior-y: none;
+}
+
+body {
+    overflow-x: hidden;
+    position: relative;
+}
+
+
+/* =========================================================
+   独立固定背景层
+   ========================================================= */
+
+/*
+ * 使用独立 fixed 层，而不是 background-attachment: fixed。
+ *
+ * 注意：
+ *
+ * 这里故意不使用 transform: translateZ(0)。
+ *
+ * 某些 Android / iOS 移动浏览器会因为
+ * translateZ(0) 创建独立合成层，
+ * 导致页面上下滑动时背景跟着移动，
+ * 松手后又弹回原位置。
+ */
+
+#background-layer {
+    position: fixed;
+
+    top: 0;
+    left: 0;
+
+    width: 100vw;
+    height: 100vh;
+
+    z-index: 0;
+    pointer-events: none;
+
+    background-image:
+        linear-gradient(
+            rgba(0,0,0,0.68),
+            rgba(0,0,0,0.68)
+        ),
+        url("background.gif");
+
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+}
+
+
+/*
+ * 所有实际页面内容放在背景层上面。
+ */
+
+header,
+#search-area,
+#statistics,
+#loading,
+#error,
+#no-results,
+#characters {
+    position: relative;
+    z-index: 1;
+}
+
+
+/* =========================================================
+   顶部
+   ========================================================= */
+
+header {
+    width: 100%;
+
+    padding:
+        30px
+        40px
+        20px;
+
+    text-align: center;
+}
+
+header h1 {
+    margin: 0;
+
+    font-size: 32px;
+
+    font-weight: 700;
+
+    letter-spacing: 1px;
+}
+
+header p {
+    margin:
+        8px
+        0
+        0;
+
+    color: #aaa;
+
+    font-size: 14px;
+}
+
+
+/* =========================================================
+   搜索区域
+   ========================================================= */
+
+#search-area {
+    width: 100%;
+
+    max-width: 900px;
+
+    margin:
+        10px
+        auto
+        20px;
+
+    padding:
+        0
+        30px;
+}
+
+
+/*
+ * 搜索栏整体。
+ */
+
+#search-panel {
+    width: 100%;
+
+    padding:
+        6px
+        8px;
+
+    border:
+        1px solid
+        rgba(255,255,255,0.15);
+
+    border-radius: 10px;
+
+    background:
+        rgba(20,20,20,0.88);
+
+    transition:
+        border-color 0.2s,
+        box-shadow 0.2s;
+}
+
+#search-panel:focus-within {
+    border-color:
+        rgba(255,255,255,0.35);
+
+    box-shadow:
+        0 0 15px
+        rgba(255,255,255,0.06);
+}
+
+
+/*
+ * 点击标签后出现的搜索标签。
+ */
+
+#selected-tags {
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 6px;
+
+    padding:
+        3px
+        3px
+        5px;
+}
+
+.search-tag {
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 5px;
+
+    padding:
+        5px
+        9px;
+
+    border-radius: 999px;
+
+    background:
+        rgba(255,255,255,0.13);
+
+    color: #eee;
+
+    font-size: 13px;
+
+    line-height: 1;
+
+    white-space: nowrap;
+}
+
+.search-tag-close {
+    width: 16px;
+    height: 16px;
+
+    padding: 0;
+
+    border: none;
+
+    border-radius: 50%;
+
+    background:
+        rgba(255,255,255,0.12);
+
+    color: #bbb;
+
+    font-size: 13px;
+
+    line-height: 16px;
+
+    cursor: pointer;
+
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+}
+
+.search-tag-close:hover {
+    background:
+        rgba(255,255,255,0.25);
+
+    color: white;
+}
+
+
+/*
+ * 实际输入框。
+ */
+
+#search-box {
+    width: 100%;
+
+    padding:
+        9px
+        10px;
+
+    border: none;
+
+    outline: none;
+
+    background: transparent;
+
+    color: white;
+
+    font-size: 15px;
+}
+
+#search-box::placeholder {
+    color: #777;
+}
+
+#search-info {
+    margin-top: 9px;
+
+    color: #777;
+
+    font-size: 12px;
+
+    text-align: center;
+}
+
+
+/* =========================================================
+   总统计
+   ========================================================= */
+
+#statistics {
+    text-align: center;
+
+    color: #888;
+
+    font-size: 13px;
+
+    margin-bottom: 10px;
+}
+
+
+/* =========================================================
+   图鉴网格
+   ========================================================= */
+
+#characters {
+    width: 100%;
+
+    max-width: 1400px;
+
+    margin: 0 auto;
+
+    padding:
+        20px
+        30px
+        40px;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            auto-fill,
+            minmax(190px, 1fr)
+        );
+
+    /*
+     * 横图占两列时，用后面的竖图填补空位。
+     */
+
+    grid-auto-flow: dense;
+
+    gap: 18px;
+}
+
+.dex-card {
+    position: relative;
+
+    display: flex;
+
+    flex-direction: column;
+
+    min-width: 0;
+
+    padding: 0;
+
+    border:
+        1px solid
+        rgba(255,255,255,0.10);
+
+    border-radius: 12px;
+
+    background:
+        rgba(20,20,20,0.82);
+
+    color: inherit;
+
+    font: inherit;
+
+    text-align: left;
+
+    cursor: pointer;
+
+    overflow: hidden;
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        border-color 0.2s ease;
+}
+
+.dex-card:hover,
+.dex-card:focus-visible {
+    transform:
+        translateY(-5px);
+
+    border-color:
+        rgba(255,255,255,0.32);
+
+    box-shadow:
+        0
+        12px
+        30px
+        rgba(0,0,0,0.55);
+
+    outline: none;
+}
+
+.dex-card.filtered-out {
+    display: none;
+}
+
+.dex-cover {
+    position: relative;
+
+    aspect-ratio: 2 / 3;
+
+    background: #181818;
+
+    overflow: hidden;
+}
+
+/*
+ * 横图封面：占两列，并用横向比例显示，
+ * 和详情页里的横图一致。
+ */
+
+.dex-card.wide {
+    grid-column: span 2;
+}
+
+.dex-card.wide .dex-cover {
+    aspect-ratio: 4 / 3;
+}
+
+.dex-cover img {
+    display: block;
+
+    width: 100%;
+
+    height: 100%;
+
+    object-fit: cover;
+
+    object-position:
+        center
+        20%;
+
+    transition:
+        transform 0.4s ease;
+}
+
+.dex-card:hover .dex-cover img,
+.dex-card:focus-visible .dex-cover img {
+    transform: scale(1.04);
+}
+
+.dex-count {
+    position: absolute;
+
+    top: 8px;
+
+    right: 8px;
+
+    padding:
+        4px
+        9px;
+
+    border-radius: 999px;
+
+    background:
+        rgba(0,0,0,0.65);
+
+    color: #ddd;
+
+    font-size: 12px;
+
+    line-height: 1;
+
+    pointer-events: none;
+}
+
+.dex-info {
+    padding:
+        10px
+        12px
+        12px;
+}
+
+.dex-name {
+    font-size: 15px;
+
+    font-weight: 600;
+
+    line-height: 1.35;
+
+    word-break: break-word;
+}
+
+.dex-name-en {
+    margin-top: 2px;
+
+    color: #999;
+
+    font-size: 12px;
+
+    line-height: 1.4;
+
+    word-break: break-word;
+}
+
+.dex-tags {
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 5px;
+
+    margin-top: 8px;
+}
+
+.dex-tags span {
+    padding:
+        3px
+        7px;
+
+    border-radius: 999px;
+
+    background:
+        rgba(255,255,255,0.08);
+
+    color: #aaa;
+
+    font-size: 11px;
+
+    line-height: 1.2;
+}
+
+
+/* =========================================================
+   角色详情层
+   ========================================================= */
+
+#detail {
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 5000;
+
+    display: none;
+
+    background: #0c0c0c;
+
+    overflow-y: auto;
+
+    overscroll-behavior: contain;
+}
+
+#detail.active {
+    display: block;
+}
+
+#detail-panel {
+    max-width: 1400px;
+
+    margin: 0 auto;
+
+    padding:
+        16px
+        30px
+        60px;
+}
+
+#detail-back {
+    position: sticky;
+
+    top: 12px;
+
+    z-index: 2;
+
+    display: inline-block;
+
+    padding:
+        9px
+        16px;
+
+    border:
+        1px solid
+        rgba(255,255,255,0.18);
+
+    border-radius: 999px;
+
+    background:
+        rgba(0,0,0,0.65);
+
+    color: #eee;
+
+    font-size: 14px;
+
+    line-height: 1;
+
+    cursor: pointer;
+
+    -webkit-backdrop-filter:
+        blur(6px);
+
+    backdrop-filter:
+        blur(6px);
+}
+
+#detail-back:hover {
+    background:
+        rgba(255,255,255,0.15);
+}
+
+.detail-head {
+    display: flex;
+
+    align-items: baseline;
+
+    justify-content: space-between;
+
+    gap: 15px;
+
+    margin-top: 20px;
+}
+
+.detail-head h2 {
+    margin: 0;
+
+    font-size: 28px;
+
+    line-height: 1.3;
+}
+
+.detail-count {
+    flex-shrink: 0;
+
+    color: #888;
+
+    font-size: 13px;
+}
+
+.detail-sub {
+    margin-top: 4px;
+
+    color: #999;
+
+    font-size: 14px;
+
+    word-break: break-word;
+}
+
+.detail-description {
+    margin: 12px 0 0;
+
+    color: #bbb;
+
+    font-size: 14px;
+
+    line-height: 1.7;
+}
+
+.detail-tags {
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 7px;
+
+    margin-top: 14px;
+}
+
+.detail-tag {
+    padding:
+        5px
+        10px;
+
+    border:
+        1px solid
+        rgba(255,255,255,0.10);
+
+    border-radius: 999px;
+
+    background:
+        rgba(0,0,0,0.38);
+
+    color: #bbb;
+
+    font-size: 12px;
+
+    line-height: 1;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        color 0.2s ease,
+        border-color 0.2s ease;
+}
+
+.detail-tag:hover {
+    background:
+        rgba(255,255,255,0.15);
+
+    border-color:
+        rgba(255,255,255,0.25);
+
+    color: white;
+}
+
+.detail-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            auto-fill,
+            minmax(200px, 1fr)
+        );
+
+    grid-auto-flow: dense;
+
+    gap: 14px;
+
+    margin-top: 22px;
+}
+
+.detail-item {
+    position: relative;
+
+    min-width: 0;
+
+    aspect-ratio: 2 / 3;
+
+    padding: 0;
+
+    border: none;
+
+    border-radius: 12px;
+
+    background: #181818;
+
+    overflow: hidden;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease;
+}
+
+.detail-item.wide {
+    grid-column: span 2;
+
+    aspect-ratio: 4 / 3;
+}
+
+.detail-item:hover,
+.detail-item:focus-visible {
+    transform:
+        translateY(-4px);
+
+    box-shadow:
+        0
+        12px
+        30px
+        rgba(0,0,0,0.55);
+
+    outline: none;
+}
+
+.detail-item img {
+    display: block;
+
+    width: 100%;
+
+    height: 100%;
+
+    object-fit: cover;
+
+    object-position:
+        center
+        20%;
+}
+
+.image-number {
+    position: absolute;
+
+    left: 10px;
+
+    bottom: 10px;
+
+    padding:
+        4px
+        8px;
+
+    background:
+        rgba(0,0,0,0.65);
+
+    border-radius: 6px;
+
+    font-size: 12px;
+
+    color: #ddd;
+
+    pointer-events: none;
+}
+
+
+/* =========================================================
+   Lightbox
+   ========================================================= */
+
+#lightbox {
+    position: fixed;
+
+    inset: 0;
+
+    background:
+        rgba(0,0,0,0.92);
+
+    z-index: 9999;
+
+    display: none;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 50px;
+}
+
+#lightbox.active {
+    display: flex;
+}
+
+#lightbox-image {
+    max-width: 95vw;
+
+    max-height: 90vh;
+
+    object-fit: contain;
+
+    border-radius: 6px;
+
+    user-select: none;
+}
+
+.lightbox-close {
+    position: fixed;
+
+    top: 20px;
+
+    right: 25px;
+
+    width: 45px;
+
+    height: 45px;
+
+    border: none;
+
+    border-radius: 50%;
+
+    background:
+        rgba(255,255,255,0.1);
+
+    color: white;
+
+    font-size: 30px;
+
+    cursor: pointer;
+
+    z-index: 10001;
+}
+
+.lightbox-close:hover {
+    background:
+        rgba(255,255,255,0.2);
+}
+
+.lightbox-button {
+    position: fixed;
+
+    top: 50%;
+
+    transform:
+        translateY(-50%);
+
+    width: 55px;
+
+    height: 70px;
+
+    border: none;
+
+    background:
+        rgba(0,0,0,0.5);
+
+    color: white;
+
+    font-size: 40px;
+
+    cursor: pointer;
+
+    z-index: 10001;
+}
+
+.lightbox-button:hover {
+    background:
+        rgba(255,255,255,0.15);
+}
+
+.lightbox-prev {
+    left: 15px;
+}
+
+.lightbox-next {
+    right: 15px;
+}
+
+#lightbox-info {
+    position: fixed;
+
+    bottom: 20px;
+
+    left: 50%;
+
+    transform:
+        translateX(-50%);
+
+    padding:
+        7px
+        14px;
+
+    border-radius: 8px;
+
+    background:
+        rgba(0,0,0,0.65);
+
+    color: #ddd;
+
+    font-size: 13px;
+
+    z-index: 10001;
+
+    white-space: nowrap;
+}
+
+
+/* =========================================================
+   加载 / 错误
+   ========================================================= */
+
+#loading {
+    text-align: center;
+
+    padding: 80px 20px;
+
+    color: #888;
+
+    font-size: 15px;
+}
+
+#error {
+    display: none;
+
+    max-width: 700px;
+
+    margin: 50px auto;
+
+    padding: 20px;
+
+    background: #251818;
+
+    border:
+        1px solid
+        #633;
+
+    border-radius: 10px;
+
+    color: #eaa;
+}
+
+#no-results {
+    display: none;
+
+    text-align: center;
+
+    padding: 70px 20px;
+
+    color: #777;
+
+    font-size: 15px;
+}
+
+
+/* =========================================================
+   手机适配
+   ========================================================= */
+
+@media (max-width: 700px) {
+
+    /*
+     * 移动端进一步禁止纵向 overscroll。
+     */
+
+    html,
+    body {
+        overscroll-behavior-y: none;
+    }
+
+    /*
+     * 手机端背景保持固定在视觉区域中央。
+     */
+
+    #background-layer {
+        width: 100vw;
+        height: 100vh;
+
+        top: 0;
+        left: 0;
+
+        background-position: center center;
+    }
+
+
+    header {
+        padding:
+            25px
+            20px
+            15px;
+    }
+
+    header h1 {
+        font-size: 25px;
+    }
+
+    #search-area {
+        padding:
+            0
+            15px;
+    }
+
+    #characters {
+        padding:
+            15px
+            15px
+            30px;
+
+        grid-template-columns:
+            repeat(
+                2,
+                minmax(0, 1fr)
+            );
+
+        gap: 12px;
+    }
+
+    .dex-name {
+        font-size: 14px;
+    }
+
+    .dex-info {
+        padding:
+            8px
+            10px
+            10px;
+    }
+
+    #detail-panel {
+        padding:
+            12px
+            15px
+            40px;
+    }
+
+    .detail-head h2 {
+        font-size: 22px;
+    }
+
+    .detail-grid {
+        grid-template-columns:
+            repeat(
+                2,
+                minmax(0, 1fr)
+            );
+
+        gap: 10px;
+    }
+
+    #lightbox {
+        padding: 20px;
+    }
+
+    .lightbox-button {
+        width: 40px;
+
+        height: 60px;
+
+        font-size: 28px;
+    }
+
+    .lightbox-prev {
+        left: 5px;
+    }
+
+    .lightbox-next {
+        right: 5px;
+    }
+
+    #lightbox-info {
+        max-width: 80vw;
+
+        overflow: hidden;
+
+        text-overflow: ellipsis;
+    }
+
+}
+
+/* =========================================================
+   AI 标识 / X 链接 / 页脚
+   ========================================================= */
+
+.header-badges {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-top: 14px;
+}
+
+.ai-badge,
+.x-link {
+    display: inline-block;
+    padding: 6px 12px;
+    border: 1px solid rgba(255,255,255,0.18);
+    border-radius: 999px;
+    background: rgba(0,0,0,0.45);
+    font-size: 12px;
+    line-height: 1;
+    color: #ddd;
+}
+
+.x-link {
+    text-decoration: none;
+    transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.x-link:hover {
+    background: rgba(255,255,255,0.15);
+    border-color: rgba(255,255,255,0.35);
+    color: #fff;
+}
+
+#site-footer {
+    position: relative;
+    z-index: 1;
+    padding: 10px 20px 40px;
+    text-align: center;
+    color: #888;
+    font-size: 12px;
+    line-height: 1.8;
+}
+
+#site-footer p {
+    margin: 0;
+}
+
+#site-footer a {
+    color: #bbb;
+    text-decoration: none;
+}
+
+#site-footer a:hover {
+    color: #fff;
+    text-decoration: underline;
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+<!-- =====================================================
+     固定背景
+     ===================================================== -->
+
+<div id="background-layer"></div>
+
+
+<header>
+
+    <h1>
+        Furry Character Gallery
+    </h1>
+
+    <p>
+        Merphy's Character Gallery
+    </p>
+
+    <div class="header-badges">
+
+        <span class="ai-badge">
+            AI Generated · AI生成 · AI生成イラスト
+        </span>
+
+        <a
+            class="x-link"
+            href="https://x.com/merphy0305"
+            target="_blank"
+            rel="noopener noreferrer"
+        >
+            𝕏 @merphy0305
+        </a>
+
+    </div>
+
+</header>
+
+
+<!-- =====================================================
+     搜索框
+     ===================================================== -->
+
+<div id="search-area">
+
+    <div id="search-panel">
+
+        <div id="selected-tags"></div>
+
+        <input
+            id="search-box"
+            type="text"
+            placeholder="搜索角色名、英文名、昵称、标签或图片编号"
+            autocomplete="off"
+        >
+
+    </div>
+
+    <div id="search-info">
+        支持中文、英文、昵称、标签和图片编号；点击角色可查看全部图片
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     总统计
+     ===================================================== -->
+
+<div id="statistics"></div>
+
+
+<!-- =====================================================
+     加载 / 错误 / 无结果
+     ===================================================== -->
+
+<div id="loading">
+    正在读取图库……
+</div>
+
+<div id="error"></div>
+
+<div id="no-results">
+    没有找到符合条件的图片。
+</div>
+
+
+<!-- =====================================================
+     角色
+     ===================================================== -->
+
+<main id="characters"></main>
+
+
+<!-- =====================================================
+     页脚：AI 声明 + X 链接
+     ===================================================== -->
+
+<footer id="site-footer">
+
+    <p>
+        本站所有图片均为 AI 生成 ·
+        All images are AI-generated ·
+        掲載画像はすべてAI生成です
+    </p>
+
+    <p>
+        作者 Author / 作者：墨扉 (merphy) ·
+        <a
+            href="https://x.com/merphy0305"
+            target="_blank"
+            rel="noopener noreferrer"
+        >𝕏 @merphy0305</a>
+    </p>
+
+</footer>
+
+
+<!-- =====================================================
+     角色详情层
+     ===================================================== -->
+
+<div id="detail" aria-hidden="true">
+
+    <div id="detail-panel">
+
+        <button
+            id="detail-back"
+            type="button"
+        >
+            ← 返回图鉴
+        </button>
+
+        <div id="detail-content"></div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     Lightbox
+     ===================================================== -->
+
+<div id="lightbox">
+
+    <button
+        class="lightbox-close"
+        onclick="closeLightbox()"
+        aria-label="关闭"
+    >
+        ×
+    </button>
+
+    <button
+        class="lightbox-button lightbox-prev"
+        onclick="previousImage()"
+        aria-label="上一张"
+    >
+        ‹
+    </button>
+
+    <img
+        id="lightbox-image"
+        src=""
+        alt="Preview"
+    >
+
+    <button
+        class="lightbox-button lightbox-next"
+        onclick="nextImage()"
+        aria-label="下一张"
+    >
+        ›
+    </button>
+
+    <div id="lightbox-info"></div>
+
+</div>
+
+
+<script>
+
+/* =========================================================
+   全局状态
+   ========================================================= */
+
+const DEFAULT_SEARCH_INFO =
+    "支持中文、英文、昵称、标签和图片编号；点击角色可查看全部图片";
+
+let galleryData = [];
+
+const characterById = new Map();
+
+let currentImages = [];
+
+let currentIndex = 0;
+
+let currentCharacterName = "";
+
+let selectedTags = [];
+
+/*
+ * 详情层是不是由页面内点击打开的（会往浏览器历史里
+ * 压一条记录）。直接打开 #角色ID 分享链接时为 false。
+ */
+
+let detailOpenedByPush = false;
+
+
+/* =========================================================
+   读取 gallery.json
+   ========================================================= */
+
+async function loadGallery() {
+
+    const loading =
+        document.getElementById("loading");
+
+    const container =
+        document.getElementById("characters");
+
+    const error =
+        document.getElementById("error");
+
+    try {
+
+        const response =
+            await fetch(
+                `gallery.json?t=${Date.now()}`
+            );
+
+        if (!response.ok) {
+
+            throw new Error(
+                `无法读取 gallery.json：${response.status}`
+            );
+
+        }
+
+        const data =
+            await response.json();
+
+        /*
+         * 没有图片的角色没有封面，不显示。
+         */
+
+        galleryData =
+            (
+                Array.isArray(data.characters)
+                    ? data.characters
+                    : []
+            ).filter(
+                character =>
+                    Array.isArray(character.images) &&
+                    character.images.length > 0
+            );
+
+        galleryData.forEach(
+            character => {
+
+                /*
+                 * 图片按编号自然排序（1, 2, 10 而不是 1, 10, 2），
+                 * 排在最前面的图片就是封面。
+                 */
+
+                character.images =
+                    [...character.images].sort(
+                        compareImagePaths
+                    );
+
+                character._searchText =
+                    getCharacterSearchText(
+                        character
+                    );
+
+                character._numbers =
+                    new Set(
+                        character.images
+                            .map(
+                                path =>
+                                    getImageNumber(
+                                        getFilename(path)
+                                            .toLocaleLowerCase()
+                                    )
+                            )
+                            .filter(Boolean)
+                    );
+
+                characterById.set(
+                    String(character.id),
+                    character
+                );
+
+            }
+        );
+
+        const fragment =
+            document.createDocumentFragment();
+
+        galleryData.forEach(
+            character => {
+
+                fragment.appendChild(
+                    createCharacterCard(
+                        character
+                    )
+                );
+
+            }
+        );
+
+        container.appendChild(fragment);
+
+        updateStatistics();
+
+        loading.style.display =
+            "none";
+
+        document
+            .getElementById("search-box")
+            .addEventListener(
+                "input",
+                performSearch
+            );
+
+        renderSelectedTags();
+
+        /*
+         * 如果链接带有 #角色ID，直接打开该角色。
+         */
+
+        syncFromHash();
+
+    } catch (err) {
+
+        console.error(err);
+
+        loading.style.display =
+            "none";
+
+        error.style.display =
+            "block";
+
+        error.innerHTML = `
+            <strong>
+                读取图库失败。
+            </strong>
+            <br><br>
+            ${escapeHtml(err.message)}
+            <br><br>
+            请确认仓库根目录存在
+            <strong>gallery.json</strong>，
+            并确认 GitHub Actions 已经成功运行。
+        `;
+
+    }
+
+}
+
+
+/* =========================================================
+   图鉴封面卡片
+   ========================================================= */
+
+function createCharacterCard(
+    character
+) {
+
+    const displayName =
+        getPrimaryName(character);
+
+    const secondaryName =
+        getSecondaryName(character);
+
+    const card =
+        document.createElement("button");
+
+    card.type =
+        "button";
+
+    card.className =
+        "dex-card";
+
+    card.dataset.characterId =
+        String(character.id);
+
+    card.setAttribute(
+        "aria-label",
+        `${formatCharacterName(character)}，${character.images.length} 张图片`
+    );
+
+
+    /*
+     * 封面
+     */
+
+    const cover =
+        document.createElement("div");
+
+    cover.className =
+        "dex-cover";
+
+    const img =
+        document.createElement("img");
+
+    img.src =
+        character.images[0];
+
+    img.alt =
+        formatCharacterName(character);
+
+    img.loading =
+        "lazy";
+
+    img.decoding =
+        "async";
+
+    /*
+     * 封面加载后判断横竖：横图占两列。
+     */
+
+    const markWide =
+        () => {
+
+            if (
+                img.naturalWidth >
+                img.naturalHeight
+            ) {
+
+                card.classList.add("wide");
+
+            }
+
+        };
+
+    img.addEventListener(
+        "load",
+        markWide
+    );
+
+    if (img.complete) {
+
+        markWide();
+
+    }
+
+    cover.appendChild(img);
+
+    if (character.images.length > 1) {
+
+        const badge =
+            document.createElement("span");
+
+        badge.className =
+            "dex-count";
+
+        badge.textContent =
+            `${character.images.length} 张`;
+
+        cover.appendChild(badge);
+
+    }
+
+    card.appendChild(cover);
+
+
+    /*
+     * 名称与标签
+     */
+
+    const info =
+        document.createElement("div");
+
+    info.className =
+        "dex-info";
+
+    const name =
+        document.createElement("div");
+
+    name.className =
+        "dex-name";
+
+    name.textContent =
+        displayName;
+
+    info.appendChild(name);
+
+    if (secondaryName) {
+
+        const nameEn =
+            document.createElement("div");
+
+        nameEn.className =
+            "dex-name-en";
+
+        nameEn.textContent =
+            secondaryName;
+
+        info.appendChild(nameEn);
+
+    }
+
+    const tags =
+        Array.isArray(character.tags)
+            ? character.tags.slice(0, 3)
+            : [];
+
+    if (tags.length > 0) {
+
+        const tagRow =
+            document.createElement("div");
+
+        tagRow.className =
+            "dex-tags";
+
+        tags.forEach(
+            tag => {
+
+                const span =
+                    document.createElement("span");
+
+                span.textContent =
+                    `#${tag}`;
+
+                tagRow.appendChild(span);
+
+            }
+        );
+
+        info.appendChild(tagRow);
+
+    }
+
+    card.appendChild(info);
+
+
+    card.addEventListener(
+        "click",
+        () => {
+
+            openDetail(
+                character.id
+            );
+
+        }
+    );
+
+    return card;
+
+}
+
+
+/* =========================================================
+   角色详情层
+   ========================================================= */
+
+function renderDetail(
+    character
+) {
+
+    const content =
+        document.getElementById(
+            "detail-content"
+        );
+
+    content.innerHTML = "";
+
+
+    /*
+     * 标题 + 张数
+     */
+
+    const head =
+        document.createElement("div");
+
+    head.className =
+        "detail-head";
+
+    const heading =
+        document.createElement("h2");
+
+    heading.textContent =
+        getPrimaryName(character);
+
+    const count =
+        document.createElement("span");
+
+    count.className =
+        "detail-count";
+
+    count.textContent =
+        `${character.images.length} 张图片`;
+
+    head.appendChild(heading);
+
+    head.appendChild(count);
+
+    content.appendChild(head);
+
+
+    /*
+     * 英文名、昵称
+     */
+
+    const subParts = [];
+
+    const secondaryName =
+        getSecondaryName(character);
+
+    if (secondaryName) {
+
+        subParts.push(secondaryName);
+
+    }
+
+    if (
+        Array.isArray(character.aliases) &&
+        character.aliases.length > 0
+    ) {
+
+        subParts.push(
+            `昵称：${character.aliases.join("、")}`
+        );
+
+    }
+
+    if (subParts.length > 0) {
+
+        const sub =
+            document.createElement("div");
+
+        sub.className =
+            "detail-sub";
+
+        sub.textContent =
+            subParts.join(" · ");
+
+        content.appendChild(sub);
+
+    }
+
+
+    /*
+     * 简介
+     */
+
+    if (character.description) {
+
+        const description =
+            document.createElement("p");
+
+        description.className =
+            "detail-description";
+
+        description.textContent =
+            character.description;
+
+        content.appendChild(description);
+
+    }
+
+
+    /*
+     * 标签：点击后关闭详情，回到图鉴并按标签筛选
+     */
+
+    if (
+        Array.isArray(character.tags) &&
+        character.tags.length > 0
+    ) {
+
+        const tagRow =
+            document.createElement("div");
+
+        tagRow.className =
+            "detail-tags";
+
+        character.tags.forEach(
+            tag => {
+
+                const button =
+                    document.createElement("button");
+
+                button.type =
+                    "button";
+
+                button.className =
+                    "detail-tag";
+
+                button.textContent =
+                    `#${tag}`;
+
+                button.title =
+                    `筛选标签：${tag}`;
+
+                button.addEventListener(
+                    "click",
+                    () => {
+
+                        closeDetail();
+
+                        addTagFilter(
+                            String(tag)
+                        );
+
+                        window.scrollTo({
+                            top: 0
+                        });
+
+                    }
+                );
+
+                tagRow.appendChild(button);
+
+            }
+        );
+
+        content.appendChild(tagRow);
+
+    }
+
+
+    /*
+     * 全部图片
+     */
+
+    const grid =
+        document.createElement("div");
+
+    grid.className =
+        "detail-grid";
+
+    const characterName =
+        formatCharacterName(character);
+
+    character.images.forEach(
+        (
+            imagePath,
+            index
+        ) => {
+
+            const item =
+                document.createElement("button");
+
+            item.type =
+                "button";
+
+            item.className =
+                "detail-item";
+
+            item.setAttribute(
+                "aria-label",
+                `${characterName} ${getFilename(imagePath)}`
+            );
+
+            const img =
+                document.createElement("img");
+
+            img.src =
+                imagePath;
+
+            img.alt =
+                `${characterName} ${getFilename(imagePath)}`;
+
+            img.loading =
+                "lazy";
+
+            img.decoding =
+                "async";
+
+            /*
+             * 横图占两列，竖图占一列。
+             */
+
+            img.addEventListener(
+                "load",
+                () => {
+
+                    if (
+                        img.naturalWidth >
+                        img.naturalHeight
+                    ) {
+
+                        item.classList.add("wide");
+
+                    }
+
+                }
+            );
+
+            const number =
+                document.createElement("div");
+
+            number.className =
+                "image-number";
+
+            number.textContent =
+                getFilename(imagePath);
+
+            item.appendChild(img);
+
+            item.appendChild(number);
+
+            item.addEventListener(
+                "click",
+                () => {
+
+                    openLightbox(
+                        character.images,
+                        index,
+                        characterName
+                    );
+
+                }
+            );
+
+            grid.appendChild(item);
+
+        }
+    );
+
+    content.appendChild(grid);
+
+}
+
+
+/*
+ * 由卡片点击触发：往历史里压入 #角色ID，
+ * 随后 hashchange 会真正显示详情层。
+ */
+
+function openDetail(
+    id
+) {
+
+    detailOpenedByPush = true;
+
+    location.hash =
+        encodeURIComponent(
+            String(id)
+        );
+
+}
+
+
+/*
+ * 由“返回图鉴”按钮、Esc、标签点击触发。
+ */
+
+function closeDetail() {
+
+    if (
+        !document
+            .getElementById("detail")
+            .classList
+            .contains("active")
+    ) {
+
+        return;
+
+    }
+
+    if (detailOpenedByPush) {
+
+        /*
+         * 回退一步，hashchange 会隐藏详情层。
+         */
+
+        detailOpenedByPush = false;
+
+        history.back();
+
+    } else {
+
+        /*
+         * 直接通过分享链接进入的：不要把用户退出本站。
+         */
+
+        history.replaceState(
+            null,
+            "",
+            location.pathname + location.search
+        );
+
+        hideDetail();
+
+    }
+
+}
+
+
+function showDetail(
+    character
+) {
+
+    const detail =
+        document.getElementById("detail");
+
+    renderDetail(character);
+
+    detail.classList.add("active");
+
+    detail.setAttribute(
+        "aria-hidden",
+        "false"
+    );
+
+    detail.scrollTop = 0;
+
+    document.body.style.overflow =
+        "hidden";
+
+    document.title =
+        `${getPrimaryName(character)} · Furry Character Gallery`;
+
+}
+
+
+function hideDetail() {
+
+    const detail =
+        document.getElementById("detail");
+
+    detail.classList.remove("active");
+
+    detail.setAttribute(
+        "aria-hidden",
+        "true"
+    );
+
+    document.getElementById(
+        "detail-content"
+    ).innerHTML = "";
+
+    document.title =
+        "Furry Character Gallery";
+
+    if (
+        !document
+            .getElementById("lightbox")
+            .classList
+            .contains("active")
+    ) {
+
+        document.body.style.overflow =
+            "";
+
+    }
+
+}
+
+
+/*
+ * 根据地址栏里的 #角色ID 显示或隐藏详情层。
+ */
+
+function syncFromHash() {
+
+    let id = "";
+
+    try {
+
+        id =
+            decodeURIComponent(
+                location.hash.slice(1)
+            );
+
+    } catch (e) {
+
+        id = "";
+
+    }
+
+    const character =
+        id
+            ? characterById.get(id)
+            : null;
+
+    if (character) {
+
+        showDetail(character);
+
+    } else {
+
+        detailOpenedByPush = false;
+
+        hideDetail();
+
+    }
+
+}
+
+
+window.addEventListener(
+    "hashchange",
+    syncFromHash
+);
+
+document
+    .getElementById("detail-back")
+    .addEventListener(
+        "click",
+        closeDetail
+    );
+
+
+/* =========================================================
+   角色显示名称
+   ========================================================= */
+
+function formatCharacterName(
+    character
+) {
+
+    const name =
+        String(
+            character.name ||
+            character.id ||
+            ""
+        ).trim();
+
+    const nameEn =
+        String(
+            character.name_en ||
+            ""
+        ).trim();
+
+    if (
+        name &&
+        nameEn &&
+        name.toLowerCase() !==
+        nameEn.toLowerCase()
+    ) {
+
+        return `${name} / ${nameEn}`;
+
+    }
+
+    return name || nameEn;
+
+}
+
+
+/*
+ * 图鉴里主标题（中文名）和副标题（英文名）分开显示。
+ */
+
+function getPrimaryName(
+    character
+) {
+
+    return String(
+        character.name ||
+        character.name_en ||
+        character.id ||
+        ""
+    ).trim();
+
+}
+
+function getSecondaryName(
+    character
+) {
+
+    const primary =
+        getPrimaryName(character);
+
+    const nameEn =
+        String(
+            character.name_en || ""
+        )
+            .replace(/_/g, " ")
+            .trim();
+
+    if (
+        !nameEn ||
+        nameEn.toLowerCase() ===
+        primary.toLowerCase()
+    ) {
+
+        return "";
+
+    }
+
+    return nameEn;
+
+}
+
+
+/* =========================================================
+   获取文件名
+   ========================================================= */
+
+function getFilename(
+    path
+) {
+
+    return String(path)
+        .split("/")
+        .pop();
+
+}
+
+
+/*
+ * 按文件名自然排序（1, 2, 10）。
+ */
+
+function compareImagePaths(
+    a,
+    b
+) {
+
+    return getFilename(a).localeCompare(
+        getFilename(b),
+        undefined,
+        {
+            numeric: true,
+            sensitivity: "base"
+        }
+    );
+
+}
+
+
+/* =========================================================
+   获取图片编号
+   ========================================================= */
+
+function getImageNumber(
+    filename
+) {
+
+    const match =
+        filename.match(
+            /^(\d+)(?:\.[^.]+)?$/i
+        );
+
+    if (!match) {
+
+        return null;
+
+    }
+
+    return match[1];
+
+}
+
+
+/* =========================================================
+   文本标准化
+   ========================================================= */
+
+function normalizeText(
+    value
+) {
+
+    return String(
+        value ?? ""
+    )
+        .toLocaleLowerCase()
+        .trim();
+
+}
+
+
+/* =========================================================
+   获取角色搜索文本
+   ========================================================= */
+
+function getCharacterSearchText(
+    character
+) {
+
+    const fields = [
+
+        character.name,
+
+        character.name_en,
+
+        ...(Array.isArray(character.aliases)
+            ? character.aliases
+            : []),
+
+        ...(Array.isArray(character.tags)
+            ? character.tags
+            : [])
+
+    ];
+
+    return fields
+        .map(normalizeText)
+        .filter(Boolean)
+        .join(" ");
+
+}
+
+
+/* =========================================================
+   Tag 搜索
+   ========================================================= */
+
+function addTagFilter(
+    tag
+) {
+
+    const normalized =
+        normalizeText(tag);
+
+    if (!normalized) {
+
+        return;
+
+    }
+
+    const exists =
+        selectedTags.some(
+            existing =>
+                normalizeText(existing) ===
+                normalized
+        );
+
+    if (!exists) {
+
+        selectedTags.push(tag);
+
+    }
+
+    renderSelectedTags();
+
+    performSearch();
+
+}
+
+
+/*
+ * 删除单个 Tag。
+ */
+
+function removeTagFilter(
+    index
+) {
+
+    if (
+        index < 0 ||
+        index >= selectedTags.length
+    ) {
+
+        return;
+
+    }
+
+    selectedTags.splice(
+        index,
+        1
+    );
+
+    renderSelectedTags();
+
+    performSearch();
+
+}
+
+
+/*
+ * 绘制搜索栏里的 Tag。
+ */
+
+function renderSelectedTags() {
+
+    const container =
+        document.getElementById(
+            "selected-tags"
+        );
+
+    container.innerHTML = "";
+
+    selectedTags.forEach(
+        (
+            tag,
+            index
+        ) => {
+
+            const chip =
+                document.createElement("span");
+
+            chip.className =
+                "search-tag";
+
+            const text =
+                document.createElement("span");
+
+            text.textContent =
+                tag;
+
+            const close =
+                document.createElement("button");
+
+            close.type =
+                "button";
+
+            close.className =
+                "search-tag-close";
+
+            close.textContent =
+                "×";
+
+            close.setAttribute(
+                "aria-label",
+                `删除标签 ${tag}`
+            );
+
+            close.addEventListener(
+                "click",
+                () => {
+
+                    removeTagFilter(index);
+
+                }
+            );
+
+            chip.appendChild(text);
+
+            chip.appendChild(close);
+
+            container.appendChild(chip);
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   搜索
+   ========================================================= */
+
+function performSearch() {
+
+    const input =
+        document
+            .getElementById("search-box")
+            .value
+            .trim();
+
+    const cards =
+        document.querySelectorAll(
+            ".dex-card"
+        );
+
+    const noResults =
+        document.getElementById(
+            "no-results"
+        );
+
+    const searchInfo =
+        document.getElementById(
+            "search-info"
+        );
+
+    /*
+     * 自由文字搜索条件
+     */
+
+    const textTokens =
+        input
+            .toLocaleLowerCase()
+            .split(/\s+/)
+            .filter(Boolean);
+
+    /*
+     * 没有任何搜索条件：显示全部
+     */
+
+    if (
+        textTokens.length === 0 &&
+        selectedTags.length === 0
+    ) {
+
+        cards.forEach(
+            card => {
+
+                card.classList.remove(
+                    "filtered-out"
+                );
+
+            }
+        );
+
+        searchInfo.textContent =
+            DEFAULT_SEARCH_INFO;
+
+        noResults.style.display =
+            "none";
+
+        return;
+
+    }
+
+    let visibleCharacters = 0;
+
+    cards.forEach(
+        card => {
+
+            const character =
+                characterById.get(
+                    card.dataset.characterId
+                );
+
+            if (!character) {
+
+                return;
+
+            }
+
+            /*
+             * Tag 条件：每个已选标签都必须命中
+             */
+
+            const characterTags =
+                (
+                    Array.isArray(character.tags)
+                        ? character.tags
+                        : []
+                ).map(normalizeText);
+
+            const tagsMatched =
+                selectedTags.every(
+                    tag =>
+                        characterTags.includes(
+                            normalizeText(tag)
+                        )
+                );
+
+            /*
+             * 文字条件：每个词都必须命中
+             *
+             * 纯数字：该角色有这个编号的图片
+             * 其他：角色名、英文名、昵称、标签
+             */
+
+            const textMatched =
+                textTokens.every(
+                    token => {
+
+                        if (/^\d+$/.test(token)) {
+
+                            return character._numbers.has(
+                                token
+                            );
+
+                        }
+
+                        return character._searchText.includes(
+                            token
+                        );
+
+                    }
+                );
+
+            if (
+                tagsMatched &&
+                textMatched
+            ) {
+
+                card.classList.remove(
+                    "filtered-out"
+                );
+
+                visibleCharacters++;
+
+            } else {
+
+                card.classList.add(
+                    "filtered-out"
+                );
+
+            }
+
+        }
+    );
+
+    searchInfo.textContent =
+        `找到 ${visibleCharacters} 个角色`;
+
+    noResults.style.display =
+        visibleCharacters === 0
+            ? "block"
+            : "none";
+
+}
+
+
+/* =========================================================
+   总统计
+   ========================================================= */
+
+function updateStatistics() {
+
+    const totalCharacters =
+        galleryData.length;
+
+    const totalImages =
+        galleryData.reduce(
+            (
+                total,
+                character
+            ) => total + character.images.length,
+            0
+        );
+
+    document
+        .getElementById("statistics")
+        .textContent =
+        `${totalCharacters} 个角色 · ${totalImages} 张图片`;
+
+}
+
+
+/* =========================================================
+   HTML 转义
+   ========================================================= */
+
+function escapeHtml(
+    value
+) {
+
+    const div =
+        document.createElement("div");
+
+    div.textContent =
+        String(value);
+
+    return div.innerHTML;
+
+}
+
+
+/* =========================================================
+   Lightbox
+   ========================================================= */
+
+function openLightbox(
+    images,
+    index,
+    characterName
+) {
+
+    currentImages =
+        images;
+
+    currentIndex =
+        index;
+
+    currentCharacterName =
+        characterName;
+
+    updateLightbox();
+
+    document
+        .getElementById("lightbox")
+        .classList
+        .add("active");
+
+    document.body.style.overflow =
+        "hidden";
+
+}
+
+
+function updateLightbox() {
+
+    if (
+        !currentImages ||
+        currentImages.length === 0
+    ) {
+
+        return;
+
+    }
+
+    const image =
+        currentImages[currentIndex];
+
+    const filename =
+        getFilename(image);
+
+    document
+        .getElementById("lightbox-image")
+        .src =
+        image;
+
+    document
+        .getElementById("lightbox-info")
+        .textContent =
+        `${currentCharacterName} · ${filename} · ${currentIndex + 1} / ${currentImages.length}`;
+
+    /*
+     * 预读下一张，翻页更流畅。
+     */
+
+    if (currentImages.length > 1) {
+
+        const next =
+            new Image();
+
+        next.src =
+            currentImages[
+                (currentIndex + 1) %
+                currentImages.length
+            ];
+
+    }
+
+}
+
+
+function closeLightbox() {
+
+    document
+        .getElementById("lightbox")
+        .classList
+        .remove("active");
+
+    /*
+     * 详情层还开着时，页面继续保持锁定滚动。
+     */
+
+    document.body.style.overflow =
+        document
+            .getElementById("detail")
+            .classList
+            .contains("active")
+            ? "hidden"
+            : "";
+
+}
+
+
+function previousImage() {
+
+    if (
+        !currentImages ||
+        currentImages.length === 0
+    ) {
+
+        return;
+
+    }
+
+    currentIndex--;
+
+    if (currentIndex < 0) {
+
+        currentIndex =
+            currentImages.length - 1;
+
+    }
+
+    updateLightbox();
+
+}
+
+
+function nextImage() {
+
+    if (
+        !currentImages ||
+        currentImages.length === 0
+    ) {
+
+        return;
+
+    }
+
+    currentIndex++;
+
+    if (
+        currentIndex >=
+        currentImages.length
+    ) {
+
+        currentIndex = 0;
+
+    }
+
+    updateLightbox();
+
+}
+
+
+/* =========================================================
+   键盘操作
+   ========================================================= */
+
+document.addEventListener(
+    "keydown",
+    event => {
+
+        const lightboxActive =
+            document
+                .getElementById("lightbox")
+                .classList
+                .contains("active");
+
+        /*
+         * 灯箱打开时：左右切图，Esc 先关灯箱
+         */
+
+        if (lightboxActive) {
+
+            if (event.key === "ArrowLeft") {
+
+                previousImage();
+
+            }
+
+            if (event.key === "ArrowRight") {
+
+                nextImage();
+
+            }
+
+            if (event.key === "Escape") {
+
+                closeLightbox();
+
+            }
+
+            return;
+
+        }
+
+        /*
+         * 灯箱已关、详情层还开着时，Esc 返回图鉴
+         */
+
+        if (event.key === "Escape") {
+
+            closeDetail();
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   点击黑色背景关闭
+   ========================================================= */
+
+document
+    .getElementById("lightbox")
+    .addEventListener(
+        "click",
+        event => {
+
+            if (
+                event.target.id ===
+                "lightbox"
+            ) {
+
+                closeLightbox();
+
+            }
+
+        }
+    );
+
+
+/* =========================================================
+   手机：灯箱左右滑动切图
+   ========================================================= */
+
+let touchStartX = null;
+
+let touchStartY = null;
+
+document
+    .getElementById("lightbox")
+    .addEventListener(
+        "touchstart",
+        event => {
+
+            if (event.touches.length === 1) {
+
+                touchStartX =
+                    event.touches[0].clientX;
+
+                touchStartY =
+                    event.touches[0].clientY;
+
+            } else {
+
+                touchStartX = null;
+
+            }
+
+        },
+        { passive: true }
+    );
+
+document
+    .getElementById("lightbox")
+    .addEventListener(
+        "touchend",
+        event => {
+
+            if (touchStartX === null) {
+
+                return;
+
+            }
+
+            const touch =
+                event.changedTouches[0];
+
+            const dx =
+                touch.clientX - touchStartX;
+
+            const dy =
+                touch.clientY - touchStartY;
+
+            touchStartX = null;
+
+            if (
+                Math.abs(dx) > 50 &&
+                Math.abs(dx) > Math.abs(dy) * 1.5
+            ) {
+
+                if (dx < 0) {
+
+                    nextImage();
+
+                } else {
+
+                    previousImage();
+
+                }
+
+            }
+
+        },
+        { passive: true }
+    );
+
+
+/* =========================================================
+   启动
+   ========================================================= */
+
+loadGallery();
+
+</script>
+
+</body>
+
+</html>
